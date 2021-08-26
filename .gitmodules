@@ -1,0 +1,27 @@
+[submodule "kagerou"]
+	path = kagerou
+	url = git@github.com:ffcafe-overlays/kagerou.git
+[submodule "facerolloverlay"]
+	path = facerolloverlay
+	url = git@github.com:ffcafe-overlays/facerolloverlay.git
+[submodule "horizoverlay"]
+	path = horizoverlay
+	url = git@github.com:ffcafe-overlays/horizoverlay.git
+[submodule "ffxiv-cmskin"]
+	path = ffxiv-cmskin
+	url = git@github.com:ffcafe-overlays/ffxiv-cmskin.git
+[submodule "mopimopi"]
+	path = mopimopi
+	url = git@github.com:ffcafe-overlays/mopimopi.git
+[submodule "mopimopi2"]
+	path = mopimopi2
+	url = git@github.com:ffcafe-overlays/mopimopi2.git
+[submodule "ikegami"]
+	path = ikegami
+	url = git@github.com:ffcafe-overlays/ikegami.git
+[submodule "ember"]
+	path = ember
+	url = git@github.com:ffcafe-overlays/ffxiv-ember-overlay.git
+[submodule "amethyst"]
+	path = amethyst
+	url = git@github.com:ffcafe-overlays/FancyDetail.git
