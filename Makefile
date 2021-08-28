@@ -14,10 +14,10 @@ ffxiv-cmskin/dist: $(shell find ffxiv-cmskin/src -type f) $(shell find ffxiv-cms
 	npm install
 	npm run build
 
-ikegami/dist: $(shell find ikegami -type f -name '*.{vue.js}')
+ikegami/dist: $(shell find ikegami/assets ikegami/components ikegami/fonts ikegami/lib ikegami/store ikegami/styles ikegami/index.vue ikegami/index.js -type f)
 	cd ikegami
 	yarn
-	yarn webpack
+	NODE_ENV=production yarn webpack
 
 ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 	cd ember
@@ -37,3 +37,4 @@ dist: js
 	cp -r facerolloverlay dist/faceroll
 	cp -r ember/build dist/ember
 	cp -r amethyst dist/amethyst
+	cp -r ikegami/dist dist/ikegami
