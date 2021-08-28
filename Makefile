@@ -36,3 +36,4 @@ dist: js
 	cp -r ffxiv-cmskin/dist dist/canisminor
 	cp -r facerolloverlay dist/faceroll
 	cp -r ember/build dist/ember
+	cp -r amethyst dist/amethyst
