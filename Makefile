@@ -4,22 +4,22 @@
 
 .SHELLFLAGS += -eo pipefail
 
-horizoverlay/build: horizoverlay/src/** horizoverlay/public/**
+horizoverlay/build: $(shell find horizoverlay/src -type f) $(shell find horizoverlay/public -type f)
 	cd horizoverlay
 	npm install
 	npm run build
 
-ffxiv-cmskin/dist: ffxiv-cmskin/src/**  ffxiv-cmskin/public/**
+ffxiv-cmskin/dist: $(shell find ffxiv-cmskin/src -type f) $(shell find ffxiv-cmskin/public -type f)
 	cd ffxiv-cmskin
 	npm install
 	npm run build
 
-ikegami/dist: ikegami/**.vue ikegami/**.js
+ikegami/dist: $(shell find ikegami -type f -name '*.{vue.js}')
 	cd ikegami
 	yarn
 	yarn webpack
 
-ember/build: ember/src/** ember/public/**
+ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 	cd ember
 	yarn
 	yarn build
@@ -35,3 +35,4 @@ dist: js
 	cp -r horizoverlay/build dist/horizoverlay
 	cp -r ffxiv-cmskin/dist dist/canisminor
 	cp -r facerolloverlay dist/faceroll
+	cp -r ember/build dist/ember
