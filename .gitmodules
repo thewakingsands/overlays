@@ -2,13 +2,13 @@
 	path = kagerou
 	url = git@github.com:ffcafe-overlays/kagerou.git
 [submodule "facerolloverlay"]
-	path = facerolloverlay
+	path = faceroll
 	url = git@github.com:ffcafe-overlays/facerolloverlay.git
 [submodule "horizoverlay"]
 	path = horizoverlay
 	url = git@github.com:ffcafe-overlays/horizoverlay.git
 [submodule "ffxiv-cmskin"]
-	path = ffxiv-cmskin
+	path = canisminor
 	url = git@github.com:ffcafe-overlays/ffxiv-cmskin.git
 [submodule "mopimopi"]
 	path = mopimopi

@@ -9,8 +9,8 @@ horizoverlay/build: $(shell find horizoverlay/src -type f) $(shell find horizove
 	npm install
 	npm run build
 
-ffxiv-cmskin/dist: $(shell find ffxiv-cmskin/src -type f) $(shell find ffxiv-cmskin/public -type f)
-	cd ffxiv-cmskin
+canisminor/dist: $(shell find canisminor/src -type f) $(shell find canisminor/public -type f)
+	cd canisminor
 	npm install
 	npm run build
 
@@ -24,7 +24,7 @@ ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 	yarn
 	yarn build
 
-js: horizoverlay/build ffxiv-cmskin/dist ikegami/dist ember/build
+js: horizoverlay/build canisminor/dist ikegami/dist ember/build
 
 dist: js
 	mkdir -p dist
@@ -33,8 +33,8 @@ dist: js
 	cp -r mopimopi dist/mopimopi
 	cp -r mopimopi2 dist/mopimopi2
 	cp -r horizoverlay/build dist/horizoverlay
-	cp -r ffxiv-cmskin/dist dist/canisminor
-	cp -r facerolloverlay dist/faceroll
+	cp -r canisminor/dist dist/canisminor
+	cp -r faceroll dist/faceroll
 	cp -r ember/build dist/ember
 	cp -r amethyst dist/amethyst
 	cp -r ikegami/dist dist/ikegami
