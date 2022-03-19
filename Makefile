@@ -9,7 +9,7 @@ horizoverlay/build: $(shell find horizoverlay/src -type f) $(shell find horizove
 	npm install
 	npm run build
 
-canisminor/dist: $(shell find canisminor/src -type f) $(shell find canisminor/public -type f)
+canisminor/dist: $(shell find canisminor/src -type f) $(shell find canisminor/public -type f) canisminor/package-lock.json
 	cd canisminor
 	npm install
 	npm run build
