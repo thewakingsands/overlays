@@ -1,4 +1,4 @@
-.PHONY: js
+.PHONY: js deploy
 
 .ONESHELL:
 
@@ -38,3 +38,8 @@ dist: js
 	cp -r ember/build dist/ember
 	cp -r amethyst dist/amethyst
 	cp -r ikegami/dist dist/ikegami
+
+deploy:
+	coscli sync index.html cos://overlays/index.html
+	coscli sync 404.html cos://overlays/404.html
+	coscli sync -r dist/ cos://overlays/
