@@ -29,6 +29,12 @@ skyline/dist: $(shell find skyline/src -type f) $(shell find skyline/public -typ
 	pnpm install
 	VITE_BASE_URL=/skyline pnpm build
 
+zeffui/dist: $(shell find zeffui -type f)
+	cd zeffui
+	rm -rf dist
+	mkdir -p dist
+	cp -r 3rdparty data scripts skins styles *.html LICENSE dist/
+
 js: horizoverlay/build canisminor/dist ikegami/dist ember/build
 
 dist: js
@@ -44,6 +50,7 @@ dist: js
 	cp -r amethyst dist/amethyst
 	cp -r ikegami/dist dist/ikegami
 	cp -r skyline/dist dist/skyline
+	cp -r zeffui/dist dist/zeffui
 
 deploy:
 	coscli sync index.html cos://overlays/index.html

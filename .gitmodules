@@ -28,3 +28,6 @@
 [submodule "skyline"]
 	path = skyline
 	url = git@github.com:ffcafe-overlays/skyline-overlay.git
+[submodule "zeffui"]
+	path = zeffui
+	url = git@github.com:thewakingsands/ZeffUI.git
