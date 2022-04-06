@@ -30,4 +30,4 @@
 	url = git@github.com:ffcafe-overlays/skyline-overlay.git
 [submodule "zeffui"]
 	path = zeffui
-	url = git@github.com:thewakingsands/ZeffUI.git
+	url = git@github.com:ffcafe-overlays/ZeffUI.git
