@@ -24,6 +24,11 @@ ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 	yarn
 	yarn build
 
+skyline/dist: $(shell find skyline/src -type f) $(shell find skyline/public -type f)
+	cd skyline
+	pnpm install
+	VITE_BASE_URL=/skyline pnpm build
+
 js: horizoverlay/build canisminor/dist ikegami/dist ember/build
 
 dist: js
@@ -38,6 +43,7 @@ dist: js
 	cp -r ember/build dist/ember
 	cp -r amethyst dist/amethyst
 	cp -r ikegami/dist dist/ikegami
+	cp -r skyline/dist dist/skyline
 
 deploy:
 	coscli sync index.html cos://overlays/index.html

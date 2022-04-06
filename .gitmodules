@@ -25,3 +25,6 @@
 [submodule "amethyst"]
 	path = amethyst
 	url = git@github.com:ffcafe-overlays/FancyDetail.git
+[submodule "skyline"]
+	path = skyline
+	url = git@github.com:ffcafe-overlays/skyline-overlay.git
