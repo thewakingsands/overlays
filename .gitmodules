@@ -31,3 +31,6 @@
 [submodule "zeffui"]
 	path = zeffui
 	url = git@github.com:ffcafe-overlays/ZeffUI.git
+[submodule "SkillDisplay"]
+	path = SkillDisplay
+	url = https://github.com/Rawrington/SkillDisplay.git
