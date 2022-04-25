@@ -35,7 +35,12 @@ zeffui/dist: $(shell find zeffui -type f)
 	mkdir -p dist
 	cp -r 3rdparty data scripts skins styles *.html LICENSE dist/
 
-js: horizoverlay/build canisminor/dist ikegami/dist ember/build
+SkillDisplay/build: $(shell find SkillDisplay/src -type f) $(shell find SkillDisplay/public -type f)
+	cd SkillDisplay
+	npm install
+	npm run build
+
+js: horizoverlay/build canisminor/dist ikegami/dist ember/build zeffui/dist SkillDisplay/build
 
 dist: js
 	mkdir -p dist
@@ -51,6 +56,7 @@ dist: js
 	cp -r ikegami/dist dist/ikegami
 	cp -r skyline/dist dist/skyline
 	cp -r zeffui/dist dist/zeffui
+	cp -r SkillDisplay/build dist/SkillDisplay
 
 deploy:
 	coscli sync index.html cos://overlays/index.html
