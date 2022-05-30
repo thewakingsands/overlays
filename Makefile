@@ -40,7 +40,7 @@ SkillDisplay/build: $(shell find SkillDisplay/src -type f) $(shell find SkillDis
 	npm install
 	npm run build
 
-js: horizoverlay/build canisminor/dist ikegami/dist ember/build zeffui/dist SkillDisplay/build
+js: horizoverlay/build canisminor/dist ikegami/dist ember/build zeffui/dist SkillDisplay/build skyline/dist
 
 dist: js
 	mkdir -p dist
