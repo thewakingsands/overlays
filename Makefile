@@ -26,8 +26,9 @@ ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 
 skyline/dist: $(shell find skyline/src -type f) $(shell find skyline/public -type f)
 	cd skyline
-	pnpm install
-	VITE_BASE_URL=/skyline pnpm build
+	nvm use 18
+	npx pnpm install
+	VITE_BASE_URL=/skyline npx pnpm build
 
 zeffui/dist: $(shell find zeffui -type f)
 	cd zeffui
