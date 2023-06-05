@@ -26,8 +26,8 @@ ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 
 skyline/dist: $(shell find skyline/src -type f) $(shell find skyline/public -type f)
 	cd skyline
-	npx pnpm install
-	VITE_BASE_URL=/skyline npx pnpm build
+	NODE_VERSION=18 ${NVM_DIR}/nvm-exec npx pnpm install --frozen-lockfile
+	VITE_BASE_URL=/skyline NODE_VERSION=18 ${NVM_DIR}/nvm-exec npx pnpm build
 
 zeffui/dist: $(shell find zeffui -type f)
 	cd zeffui
