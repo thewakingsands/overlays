@@ -57,8 +57,11 @@ dist: js
 	cp -r skyline/dist dist/skyline
 	cp -r zeffui/dist dist/zeffui
 	cp -r SkillDisplay/build dist/SkillDisplay
+	cp index.html dist/index.html
+	cp 404.html dist/404.html
 
 deploy:
+	rsync -avP --delete dist/ toomanyreqs:/var/www/overlays/
 	coscli sync index.html cos://overlays/index.html
 	coscli sync 404.html cos://overlays/404.html
 	coscli sync -r dist/ cos://overlays/
