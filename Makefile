@@ -7,27 +7,27 @@
 horizoverlay/build: $(shell find horizoverlay/src -type f) $(shell find horizoverlay/public -type f)
 	cd horizoverlay
 	npm install
-	npm run build
+	NODE_OPTIONS=--openssl-legacy-provider npm run build
 
 canisminor/dist: $(shell find canisminor/src -type f) $(shell find canisminor/public -type f) canisminor/package-lock.json
 	cd canisminor
-	npm install
+	npm install --legacy-peer-deps
 	npm run build
 
 ikegami/dist: $(shell find ikegami/assets ikegami/components ikegami/fonts ikegami/lib ikegami/store ikegami/styles ikegami/index.vue ikegami/index.js -type f)
 	cd ikegami
 	yarn
-	NODE_ENV=production yarn webpack
+	NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production yarn webpack
 
 ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 	cd ember
 	yarn
-	yarn build
+	NODE_OPTIONS=--openssl-legacy-provider yarn build
 
 skyline/dist: $(shell find skyline/src -type f) $(shell find skyline/public -type f)
 	cd skyline
-	NODE_VERSION=18 ${NVM_DIR}/nvm-exec npx pnpm install --frozen-lockfile
-	VITE_BASE_URL=/skyline NODE_VERSION=18 ${NVM_DIR}/nvm-exec npx pnpm build
+	pnpm install --frozen-lockfile
+	VITE_BASE_URL=/skyline pnpm build
 
 zeffui/dist: $(shell find zeffui -type f)
 	cd zeffui
@@ -40,12 +40,17 @@ SkillDisplay/build: $(shell find SkillDisplay/src -type f) $(shell find SkillDis
 	npm install
 	npm run build
 
-js: horizoverlay/build canisminor/dist ikegami/dist ember/build zeffui/dist SkillDisplay/build skyline/dist
+kagerou/dist: $(shell find kagerou/overlay -type f)
+	cd kagerou
+	yarn
+	yarn build
+
+js: horizoverlay/build canisminor/dist ikegami/dist ember/build zeffui/dist SkillDisplay/build skyline/dist kagerou/dist
 
 dist: js
 	mkdir -p dist
 	rm -rf dist/*
-	cp -r kagerou dist/kagerou
+	cp -r kagerou/dist dist/kagerou
 	cp -r mopimopi dist/mopimopi
 	cp -r mopimopi2 dist/mopimopi2
 	cp -r horizoverlay/build dist/horizoverlay
@@ -61,7 +66,4 @@ dist: js
 	cp 404.html dist/404.html
 
 deploy:
-	rsync -avP --delete dist/ toomanyreqs:/var/www/overlays/
-	coscli sync index.html cos://overlays/index.html
-	coscli sync 404.html cos://overlays/404.html
-	coscli sync -r dist/ cos://overlays/
+	rsync -avP dist/ toomanyreqs:/var/www/overlays/
