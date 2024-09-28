@@ -1,36 +1,48 @@
 [submodule "kagerou"]
 	path = kagerou
 	url = git@github.com:ffcafe-overlays/kagerou.git
+	branch = cn
 [submodule "facerolloverlay"]
 	path = faceroll
 	url = git@github.com:ffcafe-overlays/facerolloverlay.git
+	branch = master
 [submodule "horizoverlay"]
 	path = horizoverlay
 	url = git@github.com:ffcafe-overlays/horizoverlay.git
+	branch = cn
 [submodule "ffxiv-cmskin"]
 	path = canisminor
 	url = git@github.com:ffcafe-overlays/ffxiv-cmskin.git
+	branch = master
 [submodule "mopimopi"]
 	path = mopimopi
 	url = git@github.com:ffcafe-overlays/mopimopi.git
+	branch = cn
 [submodule "mopimopi2"]
 	path = mopimopi2
 	url = git@github.com:ffcafe-overlays/mopimopi2.git
+	branch = cn
 [submodule "ikegami"]
 	path = ikegami
 	url = git@github.com:ffcafe-overlays/ikegami.git
+	branch = cn
 [submodule "ember"]
 	path = ember
 	url = git@github.com:ffcafe-overlays/ffxiv-ember-overlay.git
+	branch = cn
 [submodule "amethyst"]
 	path = amethyst
 	url = git@github.com:ffcafe-overlays/FancyDetail.git
+	branch = cn
 [submodule "skyline"]
 	path = skyline
 	url = git@github.com:ffcafe-overlays/skyline-overlay.git
+	branch = cn
 [submodule "zeffui"]
 	path = zeffui
 	url = git@github.com:ffcafe-overlays/ZeffUI.git
+	branch = cn
 [submodule "SkillDisplay"]
 	path = SkillDisplay
 	url = https://github.com/Rawrington/SkillDisplay.git
+	branch = master
