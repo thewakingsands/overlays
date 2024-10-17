@@ -17,7 +17,7 @@ canisminor/dist: $(shell find canisminor/src -type f) $(shell find canisminor/pu
 ikegami/dist: $(shell find ikegami/assets ikegami/components ikegami/fonts ikegami/lib ikegami/store ikegami/styles ikegami/index.vue ikegami/index.js -type f)
 	cd ikegami
 	yarn
-	NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production yarn webpack
+	NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production yarn vite build
 
 ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 	cd ember
