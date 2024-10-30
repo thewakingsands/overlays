@@ -44,5 +44,5 @@
 	branch = cn
 [submodule "SkillDisplay"]
 	path = SkillDisplay
-	url = https://github.com/Rawrington/SkillDisplay.git
+	url = git@github.com:ffcafe-overlays/SkillDisplay
 	branch = master
