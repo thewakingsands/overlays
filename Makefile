@@ -27,7 +27,7 @@ ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 skyline/dist: $(shell find skyline/src -type f) $(shell find skyline/public -type f)
 	cd skyline
 	bun install --frozen-lockfile
-	VITE_BASE_URL=/skyline bun bundle
+	VITE_BASE_URL=/skyline bun run build
 
 zeffui/dist: $(shell find zeffui -type f)
 	cd zeffui
