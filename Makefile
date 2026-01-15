@@ -26,8 +26,8 @@ ember/build: $(shell find ember/src -type f) $(shell find ember/public -type f)
 
 skyline/dist: $(shell find skyline/src -type f) $(shell find skyline/public -type f)
 	cd skyline
-	bun install --frozen-lockfile
-	VITE_BASE_URL=/skyline bun run build
+	pnpm install --frozen-lockfile
+	VITE_BASE_URL=/skyline pnpm build
 
 zeffui/dist: $(shell find zeffui -type f)
 	cd zeffui
@@ -62,6 +62,7 @@ dist: js
 	cp -r skyline/dist dist/skyline
 	cp -r zeffui/dist dist/zeffui
 	cp -r SkillDisplay/build dist/SkillDisplay
+	cp -r fonts dist/fonts
 	cp index.html dist/index.html
 	cp 404.html dist/404.html
 

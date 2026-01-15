@@ -1,2 +1,4 @@
-nodejs 20.11.1
-bun 1.2.12
+nodejs latest
+bun  latest
+pnpm latest
+yarn latest
