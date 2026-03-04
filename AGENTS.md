@@ -37,10 +37,23 @@
 - 初始化与拉取:
   - `git submodule update --init --recursive`
 - 将模板加入构建与发布:
-  - 需要构建的模板：在 `Makefile` 增加对应目标，并加入 `js` 与 `dist` 聚合流程
+  - 需要构建的模板
+    - 在 `Makefile` 增加对应目标，并加入 `js` 与 `dist` 聚合流程
+    - 注意检查 base url，需要是 `/folder-name` 这样的，因为部署的时候，是部署到子目录的
   - 无需构建的模板：在 `dist` 目标中加入拷贝逻辑
-- 更新模板选择页:
-  - 在 `index.html` 增加入口链接和说明
+- 检查模板依赖
+  - 如果有 overlay plugin 的 `shared/common.min.js` ：改为 `https://overlays.ffcafe.cn/assets/overlayplugin/common.min.js`
+  - 如果有 google fonts 
+    - 检查 `fonts` 文件夹是否有对应的 CSS 文件，有就直接用，没有就按下面流程下载生成：
+      - 通过 `wget` 下载对应 CSS 放到 `fonts` 文件夹下面，并且：
+      - 用 `sed` 替换 CSS 里的 URL `https://fonts.gstatic.com` 替换为 `https://gf-static.xivcdn.com`
+    - 然后在网页里面把对应的 link 标签改为 `https://overlays.ffcafe.cn/fonts/font-name.css`
+- 提交和推送：如果修改了代码，就需要做，没改就不需要 fork 了
+  - 把原来的 origin 重命名成 upstream
+  - 添加一个 `git@github.com:ffcafe-overlays/repo.git` 这个格式的 upstream 叫 origin
+  - 生成通过 gh cli fork 对应的仓库到 ffcafe-overlays 组织的小脚本，然后叫人类来手动执行
+  - 提交 submodule 的代码到 `cn` 分支上
+  - 由人类来 push 就可以
 
 ## 测试
 不要测试

@@ -44,8 +44,25 @@ kagerou/dist: $(shell find kagerou/overlay -type f)
 	cd kagerou
 	yarn
 	yarn build
+	mkdir -p dist
+	touch dist
 
-js: horizoverlay/build canisminor/dist ikegami/dist ember/build zeffui/dist SkillDisplay/build skyline/dist kagerou/dist
+klondike/dist: $(shell find klondike/src -type f) $(shell find klondike/public -type f) klondike/babel.config.js klondike/vue.config.js klondike/package-lock.json
+	cd klondike
+	npm install --legacy-peer-deps
+	NODE_OPTIONS=--openssl-legacy-provider npm run build
+
+ffxiv-glass-overlay/build: $(shell find ffxiv-glass-overlay/src -type f) $(shell find ffxiv-glass-overlay/public -type f) ffxiv-glass-overlay/package-lock.json ffxiv-glass-overlay/vite.config.ts ffxiv-glass-overlay/tsconfig.json
+	cd ffxiv-glass-overlay
+	npm install
+	npm run build
+
+Next-UI/dist/next-ui: $(shell find Next-UI/src -type f) Next-UI/angular.json Next-UI/package.json Next-UI/tsconfig.json
+	cd Next-UI
+	npm install --legacy-peer-deps
+	npm run build -- --base-href=/Next-UI/
+
+js: horizoverlay/build canisminor/dist ikegami/dist ember/build zeffui/dist SkillDisplay/build skyline/dist kagerou/dist klondike/dist ffxiv-glass-overlay/build Next-UI/dist/next-ui
 
 dist: js
 	mkdir -p dist
@@ -62,7 +79,12 @@ dist: js
 	cp -r skyline/dist dist/skyline
 	cp -r zeffui/dist dist/zeffui
 	cp -r SkillDisplay/build dist/SkillDisplay
+	cp -r DeepDungeonOverlay/overlay dist/DeepDungeonOverlay
+	cp -r klondike/dist dist/klondike
+	cp -r ffxiv-glass-overlay/build dist/ffxiv-glass-overlay
+	cp -r Next-UI/dist/next-ui dist/Next-UI
 	cp -r fonts dist/fonts
+	cp -r assets dist/assets
 	cp index.html dist/index.html
 	cp 404.html dist/404.html
 
