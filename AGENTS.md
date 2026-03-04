@@ -13,6 +13,8 @@
 
 ## 日常维护（核心流程）
 - 拉取上游子模块更新并合并到本仓库。
+  - 子模块的上游 origin 都叫 `upstream`，类似这样 `git -C path fetch upstream`
+  - 把上游的主分支给 merge 进来
 - 统一构建并生成 `dist/`。
 - 发布到服务器（`make deploy`）。
 

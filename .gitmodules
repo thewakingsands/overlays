@@ -49,16 +49,16 @@
 [submodule "DeepDungeonOverlay"]
 	path = DeepDungeonOverlay
 	url = https://github.com/iamlokken/DeepDungeonOverlay.git
-	branch = main
+	branch = cn
 [submodule "klondike"]
 	path = klondike
 	url = https://github.com/kalilistic/klondike.git
-	branch = master
+	branch = cn
 [submodule "ffxiv-glass-overlay"]
 	path = ffxiv-glass-overlay
 	url = https://github.com/piousvenom/ffxiv-glass-overlay.git
-	branch = main
+	branch = cn
 [submodule "Next-UI"]
 	path = Next-UI
 	url = https://github.com/kaminaris/Next-UI.git
-	branch = master
+	branch = cn
