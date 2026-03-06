@@ -1,0 +1,67 @@
+diff --git a/faceroll_config.ini b/faceroll_config.ini
+index 658aba0..faa1cd1 100644
+--- a/faceroll_config.ini
++++ b/faceroll_config.ini
+@@ -98,7 +98,7 @@ var exPosition = 25;
+ =============================*/
+ /*--- 单汉字职业名 ---*/
+ var tanJob = {	Pld: "骑", War: "战", Drk: "暗", Mnk: "僧", Drg: "龙", Brd: "诗", Nin: "忍", Mch: "机",
+-				Smn: "召", Blm: "黑", Whm: "白", Sch: "学", Ast: "占", Sam: "侍", Rdm: "赤",
++				Smn: "召", Blm: "黑", Whm: "白", Sch: "学", Ast: "占", Sam: "侍", Rdm: "赤", Rpr: "镰", Sge: "贤",
+ 				Gla: "剑", Mrd: "斧", Pgl: "格", Lnc: "枪", Arc: "弓", Rog: "双", Acn: "巴", Thm: "咒", Cnj: "幻",
+ 				LtB: "LB", Gar: "迦楼罗之灵", Tit: "泰坦之灵", Ifr: "伊芙利特之灵", Eos: "朝日小仙女", Sle: "夕月小仙女", Eme: "绿宝石兽", Tpz: "黄宝石兽", Cho: "陆行鸟", Atr: "车式浮空炮塔", Atb: "象式浮空炮塔" };
+ 
+@@ -123,6 +123,8 @@ farce["Sch"] = ['学者', '我就一拉皮条的', '小仙女才是奶'];
+ farce["Ast"] = ['占星术士', '抽卡抽卡', '我负责美美美'];
+ farce["Sam"] = ['武士', '自嗨毒瘤', '14万！'];
+ farce["Rdm"] = ['赤魔法师', '我不是奶妈', '拒绝拉人'];
++farce["Rpr"] = ['钐镰客', '镰刀', '我是镰刀'];
++farce["Sge"] = ['贤者', '我负责贤者'];
+ 
+ farce["Gar"] = ['迦楼罗之灵'];
+ farce["Ifr"] = ['伊芙利特之灵']; 
+@@ -145,4 +147,4 @@ farce["Cnj"] = ['幻术师'];
+ farce["Eme"] = ['绿宝石兽'];
+ farce["Tpz"] = ['黄宝石兽'];
+ farce["Atr"] = ['车式浮空炮塔'];
+-farce["Atb"] = ['象式浮空炮塔'];
+\ No newline at end of file
++farce["Atb"] = ['象式浮空炮塔'];
+diff --git a/faceroll_parse.js b/faceroll_parse.js
+index 0aea37a..41a35ef 100644
+--- a/faceroll_parse.js
++++ b/faceroll_parse.js
+@@ -2,8 +2,8 @@
+ 　　　　　　　各種定義
+ =============================*/
+ var tankRole = ["Gla", "Pld", "Mrd", "War", "Drk"];
+-var dpsRole = ["Pgl", "Mnk", "Lnc", "Drg", "Arc", "Brd", "Rog", "Nin", "Mch", "Acn", "Smn", "Thm", "Blm", "Sam", "Rdm"];
+-var healerRole = ["Cnj", "Whm", "Sch", "Eos", "Sle", "Ast"];
++var dpsRole = ["Pgl", "Mnk", "Lnc", "Drg", "Arc", "Brd", "Rog", "Nin", "Mch", "Acn", "Smn", "Thm", "Blm", "Sam", "Rdm", "Rpr"];
++var healerRole = ["Cnj", "Whm", "Sch", "Eos", "Sle", "Ast", "Sge"];
+ var petRole = ["Cho", "Gar", "Ifr", "Tit", "Eos", "Sle", "Eme", "Tpz", "Atr", "Atb"];
+ 
+ var farce = [];
+@@ -1184,4 +1184,4 @@ function to_seed_num(name, zone) {
+ 
+     n = n.toString();
+     return Number(n.substr(2, 8) * (z + DD.getFullYear() + DD.getMonth() + DD.getDate() + DD.getDay()));
+-}
+\ No newline at end of file
++}
+diff --git a/jobicon/Dnc.png b/jobicon/Dnc.png
+new file mode 100644
+index 0000000..3804fba
+Binary files /dev/null and b/jobicon/Dnc.png differ
+diff --git a/jobicon/Gnb.png b/jobicon/Gnb.png
+new file mode 100644
+index 0000000..dcb5744
+Binary files /dev/null and b/jobicon/Gnb.png differ
+diff --git a/jobicon/Rpr.png b/jobicon/Rpr.png
+new file mode 100644
+index 0000000..52a4c14
+Binary files /dev/null and b/jobicon/Rpr.png differ
+diff --git a/jobicon/Sge.png b/jobicon/Sge.png
+new file mode 100644
+index 0000000..2e8604c
+Binary files /dev/null and b/jobicon/Sge.png differ

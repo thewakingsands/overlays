@@ -1,0 +1,32 @@
+切换到子模块目录，然后通过 `git remote` 和 `git remote get-url` 等命令，了解对应模块的 remotes 和分支。
+
+一般来说应该有个 cn 分支，然后有个 upstream 的 remote，那就是上游。
+
+如果 origin 分支是 ffcafe-overlays 组织下的，那这个就是我们维护的 fork 仓库。
+
+然后执行如下任务：
+
+1. 通过 `git` 输出我们 fork 的分支和上游的差异，放到主仓库根目录下 `diffs/module-name.diff` 下
+2. 在主仓库根目录下 `docs` 文件夹里创建一个和子模块目录名相同的 markdown 文件，并写入文件内容如下：
+
+```markdown
+# submodule-name
+
+[上游仓库](https://github.com/username/repo-name)
+
+[fork仓库](https://github.com/ffcafe-overlays/repo-name)
+
+## fork 改动列表
+
+1. 修改默认语言为中文
+2. 本地化字体
+3. 本地化 OverlayPlugin 资源
+4. 去除 GA
+5. ....
+
+## 构建方法
+
+...
+```
+
+其中 fork 改动列表需要列出各处改动的含义，构建方法从仓库根目录 Makefile 里找，把命令写上就行。

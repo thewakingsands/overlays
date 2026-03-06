@@ -1,0 +1,35 @@
+diff --git a/public/index.html b/public/index.html
+index 3fc4c28..5e9fee8 100644
+--- a/public/index.html
++++ b/public/index.html
+@@ -1,16 +1,7 @@
+ <!doctype html>
+-<html lang="en">
++<html lang="zh-Hans">
+ 
+ <head>
+-  <!-- Global site tag (gtag.js) - Google Analytics -->
+-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-50702825-3"></script>
+-  <script>
+-    window.dataLayer = window.dataLayer || [];
+-    function gtag() { dataLayer.push(arguments); }
+-    gtag('js', new Date());
+-
+-    gtag('config', 'UA-50702825-3');
+-  </script>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="theme-color" content="#000000">
+diff --git a/src/helpers.js b/src/helpers.js
+index 0b7c070..2e009fc 100644
+--- a/src/helpers.js
++++ b/src/helpers.js
+@@ -21,7 +21,7 @@ export const defaultConfig = {
+   zoom: '1',
+   discord: '',
+   maxCombatants: 8,
+-  locale: 'enUS',
++  locale: 'zhCN',
+   configWindow: {
+     width: 1300,
+     height: 239

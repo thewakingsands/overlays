@@ -1,0 +1,155 @@
+diff --git a/css/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2 b/css/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2
+new file mode 100644
+index 0000000..e916217
+Binary files /dev/null and b/css/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2 differ
+diff --git a/css/icon.css b/css/icon.css
+index 9a0593b..d155e76 100644
+--- a/css/icon.css
++++ b/css/icon.css
+@@ -3,7 +3,7 @@
+     font-family: 'Material Icons';
+     font-style: normal;
+     font-weight: 400;
+-    src: url(https://fonts.gstatic.com/s/materialicons/v36/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
++    src: url(2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+ }
+ 
+ .material-icons {
+diff --git a/images/glow/rpr.png b/images/glow/rpr.png
+new file mode 100644
+index 0000000..52a4c14
+Binary files /dev/null and b/images/glow/rpr.png differ
+diff --git a/images/glow/sge.png b/images/glow/sge.png
+new file mode 100644
+index 0000000..2e8604c
+Binary files /dev/null and b/images/glow/sge.png differ
+diff --git a/js/mopimopi.js b/js/mopimopi.js
+index 6708248..871a090 100644
+--- a/js/mopimopi.js
++++ b/js/mopimopi.js
+@@ -14,7 +14,8 @@ var customFlag = !0;
+ var initACTElement = [0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+ var initHealerElement = [0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+ var OnlyUsers = 0;
+-var objTime;
++var hidden = false
++var objTimeArray = new Array();
+ var mpLang = [];
+ var dataAbbList = null;
+ var palette = {
+@@ -685,7 +686,13 @@ function autoHidden(flag) {
+     if (localStorage.getItem("autoHide") == 0 || OnlyUsers == 0)
+         return; else {
+         if (flag == "OFF") {
+-            objTime = setTimeout(function () {
++            if (hidden) {
++                return;
++            }
++            objTimeArray.unshift(setTimeout(function () {
++                if (hidden) {
++                    return;
++                }
+                 if (OnlyUsers > 9 && localStorage.getItem('raidMode') == 1) {
+                     $('body').find('[name=raid]').addClass('hidden')
+                 }
+@@ -703,9 +710,10 @@ function autoHidden(flag) {
+                         else if (localStorage.getItem('lang') == "en")
+                             var $toastContent = $('<div class="row col s12 white-text center">< Auto-hide ><br>Do you want to view data table again? Just Click on the Overlay!</div>'); else var $toastContent = $('<div class="row col s12 white-text center">< Auto-hide ><br>Do you want to view data table again? Just Click on the Overlay!</div>');
+                         Materialize.toast($toastContent, 3000)
++                        hidden = true
+                     }
+                 }
+-            }, parseInt(localStorage.getItem('autoHideTime')) * 60000)
++            }, parseInt(localStorage.getItem('autoHideTime')) * 60000))
+         }
+         else {
+             if (OnlyUsers > 9 && localStorage.getItem('raidMode') == 1) {
+@@ -714,7 +722,12 @@ function autoHidden(flag) {
+             else {
+                 $('body').find('#graphTableBody, #graphTableHeader').removeClass('hidden')
+             }
+-            clearTimeout(objTime);
++            objTime = objTimeArray.shift()            
++            while (typeof(objTime) != 'undefined') {
++                clearTimeout(objTime);
++                objTime = objTimeArray.shift();
++            }
++            hidden = false
+             if (lastCombat.title != 'Encounter')
+                 autoHidden("OFF")
+         }
+@@ -1717,10 +1730,13 @@ function onUpdateCSS() {
+ }
+ 
+ function onOverlayDataUpdate(e) {
+-    if (localStorage.getItem('history') == 1)
+-        closeHistory();
+     lastCombat = new Combatant(e, 'encdps');
+     lastCombatHPS = new Combatant(e, 'enchps');
++    try {
++        startFlag = lastCombat?.isActive === 'true' ? 1 : 0
++    } catch (error) {
++        startFlag = 0
++    }
+     setTimeout(function () {
+         saveLog();
+         update()
+@@ -1745,6 +1761,10 @@ function onUpdateUserData() {
+     if (startFlag == 1) {
+         $('body').find('.dropdown-button').dropdown('close');
+         startFlag = 0
++        hidden = false
++    }
++    if (hidden) {
++        return;
+     }
+     $("nav [name=main]").find(".time").text(lastCombat.duration);
+     $("nav [name=main]").find(".info .bigText").text(lastCombat.title);
+@@ -2327,6 +2347,7 @@ function inputColor(a) {
+             case 'CNJ':
+                 return '#' + localStorage.getItem("heal1");
+             case 'SCH':
++            case 'SGE':
+                 return '#' + localStorage.getItem("heal2");
+             case 'AST':
+                 return '#' + localStorage.getItem("heal3");
+@@ -2346,6 +2367,7 @@ function inputColor(a) {
+                 return '#' + localStorage.getItem("dps4");
+             case 'SMN':
+             case 'ACN':
++            case 'RPR':
+                 return '#' + localStorage.getItem("dps5");
+             case 'RDM':
+                 return '#' + localStorage.getItem("dps9");
+@@ -2444,7 +2466,7 @@ function saveLog() {
+         if (lastCombat.title != 'Encounter') {
+             encounterArray.unshift({lastCombat: lastCombat, lastCombatHPS: lastCombatHPS});
+             if (encounterArray.length >= 2) {
+-                if (encounterArray[1].combatKey == lastCombat.combatKey) {
++                if (encounterArray[1].lastCombat.combatKey == lastCombat.combatKey) {
+                     encounterArray.shift()
+                 } else {
+                     historyAddRow()
+@@ -2452,15 +2474,19 @@ function saveLog() {
+             } else {
+                 historyAddRow()
+             }
+-            autoHidden("OFF");
+             saveLogFlag = !0
+-            startFlag = 1
++            if (!hidden) {
++                autoHidden("OFF");
++            }
+         }
+     }
+ }
+ 
+ function historyAddRow() {
+-    console.log(lastCombat)
++    if (localStorage.getItem('history') == 1) {
++        closeHistory();
++    }
++    // console.log(lastCombat)
+     var wrap = document.getElementById('historyListBody');
+     var newHistory = document.createElement("div");
+     var oldHistory = document.getElementById('oldHistoryBody');

@@ -1,0 +1,64 @@
+diff --git a/index.html b/index.html
+index df196ae..9c2157e 100644
+--- a/index.html
++++ b/index.html
+@@ -3,18 +3,12 @@
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+-    <link rel="preconnect" crossorigin href="https://fonts.gstatic.com" />
+-    <link rel="stylesheet" crossorigin href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" />
+-    <link rel="stylesheet" crossorigin href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" />
+-    <link rel="stylesheet" crossorigin href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans+SC:wght@100..900&display=swap" />
+-    <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_ID%"></script>
+-    <script>
+-      window.dataLayer = window.dataLayer || [];
+-      function gtag() { dataLayer.push(arguments); }
+-      gtag('js', new Date());
+-      gtag('config', '%VITE_GA_ID%');
+-    </script>
++    <link rel="preconnect" crossorigin href="https://gf-static.xivcdn.com" />
++    <link rel="preconnect" crossorigin href="https://mf-static.xivcdn.com" />
++    <link rel="stylesheet" crossorigin href="/fonts/inter.css" />
++    <link rel="stylesheet" crossorigin href="/fonts/google-sans-flex.css" />
++    <link rel="stylesheet" crossorigin href="/fonts/noto-sans-cjk.css" />
++    <link rel="stylesheet" crossorigin href="/fonts/mi-sans.css" />
+     <link rel="icon" sizes="any" href="/favicon.svg" />
+     <title>Skyline Overlay</title>
+     <meta name="description" content="A modern customizable horizon FFXIV miniparse overlay." />
+diff --git a/src/scss/fonts.ts b/src/scss/fonts.ts
+index dc8f99f..3034ab6 100644
+--- a/src/scss/fonts.ts
++++ b/src/scss/fonts.ts
+@@ -41,30 +41,7 @@ const google = `
+ `;
+ 
+ // misans
+-const base = import.meta.env.BASE_URL ?? '';
+-const prefix = base.endsWith('/') ? base : base + '/';
+ const misans = `
+-  @font-face {
+-    font-family: 'MiSans';
+-    font-style: normal;
+-    font-weight: 300;
+-    font-display: swap;
+-    src: url('${prefix}fonts/misans-4d009-normal-305.woff2') format('woff2');
+-  }
+-  @font-face {
+-    font-family: 'MiSans';
+-    font-style: normal;
+-    font-weight: 400;
+-    font-display: swap;
+-    src: url('${prefix}fonts/misans-4d009-medium-380.woff2') format('woff2');
+-  }
+-  @font-face {
+-    font-family: 'MiSans';
+-    font-style: normal;
+-    font-weight: 500;
+-    font-display: swap;
+-    src: url('${prefix}fonts/misans-4d009-semibold-520.woff2') format('woff2');
+-  }
+   html[data-font='misans'] {
+     font-family: MiSans, sans-serif;
+   }

@@ -1,0 +1,1602 @@
+diff --git a/.env-cmdrc b/.env-cmdrc
+new file mode 100644
+index 0000000..1fdc651
+--- /dev/null
++++ b/.env-cmdrc
+@@ -0,0 +1,37 @@
++{
++	"default": {
++		"REACT_APP_ROUTER_BASE": "/ember",
++		"REACT_APP_HTTP_BASE": "/ember",
++		"REACT_APP_REDIRECT_URL": "https://overlays.ffcafe.cn/ember",
++		"REACT_APP_VERSION": "0.1.0",
++		"REACT_APP_GITHUB_URL": "https://github.com/ffcafe-overlays/ffxiv-ember-overlay",
++		"REACT_APP_DISCORD_URL": "https://discord.gg/invite",
++		"REACT_APP_AUTHOR_URL": "https://github.com/GoldenChrysus/ffxiv-ember-overlay",
++		"REACT_APP_TWITCH_API_CLIENT_ID": "your_api_client_id",
++		"REACT_APP_CASH_DONATE_LINK": "https://cash.app/$username",
++		"REACT_APP_PAYPAL_DONATE_LINK": "https://paypal.me/username",
++		"REACT_APP_STREAMLABS_DONATE_LINK": "https://streamlabsurl.com",
++		"REACT_APP_KOFI_DONATE_LINK": "https://ko-fi.com/username",
++		"REACT_APP_PATREON_DONATE_LINK": "https://www.patreon.com/username",
++		"REACT_APP_PAYPAY_DONATE_LINK": "https://qr.paypay.ne.jp/paypay_code",
++		"REACT_APP_PAYPAY_DONATE_ID": "your_paypay_id"
++	},
++	"development": {
++		"REACT_APP_PAGE_TITLE": "Development Environment",
++		"REACT_APP_GOOGLE_TAG_MANAGER_ID": "GTM-ABCDEF3",
++		"REACT_APP_ENV": "development"
++	},
++	"staging": {
++		"REACT_APP_PAGE_TITLE": "Staging Environment",
++		"REACT_APP_GOOGLE_TAG_MANAGER_ID": "GTM-ABCDEF2",
++		"REACT_APP_ENV": "staging"
++	},
++	"production": {
++		"REACT_APP_PAGE_TITLE": "Production Environment",
++		"REACT_APP_GOOGLE_TAG_MANAGER_ID": "GTM-ABCDEF1",
++		"REACT_APP_ENV": "production"
++	},
++	"nonssl": {
++		"REACT_APP_GOOGLE_TAG_MANAGER_ID": "GTM-ABCDEF4"
++	}
++}
+diff --git a/.env-cmdrc.sample b/.env-cmdrc.sample
+index ba14a02..b0c2cde 100644
+--- a/.env-cmdrc.sample
++++ b/.env-cmdrc.sample
+@@ -7,7 +7,6 @@
+ 		"REACT_APP_GITHUB_URL": "https://github.com/username/repository",
+ 		"REACT_APP_DISCORD_URL": "https://discord.gg/invite",
+ 		"REACT_APP_AUTHOR_URL": "https://yourwebsite.com",
+-		"REACT_APP_CHANGELOG_URL": "https://github.com/username/repository/blob/master/CHANGELOG.md",
+ 		"REACT_APP_TWITCH_API_CLIENT_ID": "your_api_client_id",
+ 		"REACT_APP_CASH_DONATE_LINK": "https://cash.app/$username",
+ 		"REACT_APP_PAYPAL_DONATE_LINK": "https://paypal.me/username",
+diff --git a/.github/workflows/autodeploy.yml b/.github/workflows/autodeploy.yml
+index 927caed..65f8f20 100644
+--- a/.github/workflows/autodeploy.yml
++++ b/.github/workflows/autodeploy.yml
+@@ -22,7 +22,6 @@ env:
+   GIT_USER: ${{ secrets.GIT_USER }}
+   REACT_APP_AUTHOR_URL: ${{ secrets.REACT_APP_AUTHOR_URL }}
+   REACT_APP_CASH_DONATE_LINK: ${{ secrets.REACT_APP_CASH_DONATE_LINK }}
+-  REACT_APP_CHANGELOG_URL: ${{ secrets.REACT_APP_CHANGELOG_URL }}
+   REACT_APP_DISCORD_URL: ${{ secrets.REACT_APP_DISCORD_URL }}
+   REACT_APP_GITHUB_URL: ${{ secrets.REACT_APP_GITHUB_URL }}
+   REACT_APP_GOOGLE_TAG_MANAGER_ID: ${{ secrets.REACT_APP_GOOGLE_TAG_MANAGER_ID }}
+diff --git a/.gitignore b/.gitignore
+index 02df0bf..9cf3d37 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -17,7 +17,6 @@
+ .env.development.local
+ .env.test.local
+ .env.production.local
+-.env-cmdrc
+ 
+ # logs
+ npm-debug.log*
+@@ -33,4 +32,4 @@ package-lock.json
+ # developer junkyard
+ /misc
+ /scripts/local/data
+-/scripts/local/test/**/*.*
+\ No newline at end of file
++/scripts/local/test/**/*.*
+diff --git a/.yarn/install-state.gz b/.yarn/install-state.gz
+new file mode 100644
+index 0000000..c918409
+Binary files /dev/null and b/.yarn/install-state.gz differ
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+new file mode 100644
+index 0000000..3186f3f
+--- /dev/null
++++ b/.yarnrc.yml
+@@ -0,0 +1 @@
++nodeLinker: node-modules
+diff --git a/craco.config.js b/craco.config.js
+index c0ea2a1..1c36ed1 100644
+--- a/craco.config.js
++++ b/craco.config.js
+@@ -1,5 +1,3 @@
+-const { getLoader, loaderByName, throwUnexpectedConfigError } = require("@craco/craco");
+-
+ module.exports = {
+ 	babel : {
+ 		plugins : ["@babel/plugin-transform-optional-chaining"],
+@@ -11,46 +9,7 @@ module.exports = {
+ 	},
+ 	plugins : [
+ 		{
+-			plugin  : require("craco-less"),
+-			options : {
+-				lessLoaderOptions : {
+-					javascriptEnabled : true,
+-				},
+-			},
+-		},
+-		{
+-			plugin : {
+-				overrideWebpackConfig({ context, webpackConfig }) {
+-					const { isFound, match: fileLoaderMatch } = getLoader(
+-						webpackConfig,
+-						loaderByName("file-loader"),
+-					);
+-
+-					if (!isFound) {
+-						throwUnexpectedConfigError({
+-							message : `Can't find file-loader in the ${context.env} webpack config!`,
+-						});
+-					}
+-
+-					fileLoaderMatch.loader.exclude.push(/theme.config$/);
+-					fileLoaderMatch.loader.exclude.push(/\.variables$/);
+-					fileLoaderMatch.loader.exclude.push(/\.overrides$/);
+-
+-					if (["development", "staging"].indexOf(process.env.REACT_APP_ENV) !== -1) {
+-						webpackConfig.mode                      = "development";
+-						webpackConfig.optimization.minimize     = false;
+-						webpackConfig.optimization.runtimeChunk = false;
+-						webpackConfig.optimization.splitChunks  = {
+-							cacheGroups : {
+-								default : false,
+-							},
+-						};
+-						webpackConfig.output.filename           = "[name].js";
+-					}
+-
+-					return webpackConfig;
+-				},
+-			},
++			plugin : require("@semantic-ui-react/craco-less"),
+ 		},
+ 	],
+ 	eslint : {
+diff --git a/package.json b/package.json
+index 894907f..530cef6 100644
+--- a/package.json
++++ b/package.json
+@@ -17,17 +17,16 @@
+ 	"private": true,
+ 	"dependencies": {
+ 		"@babel/plugin-transform-optional-chaining": "^7.24.7",
+-		"changelog-parser": "^2.8.0",
+ 		"chart.js": "^2.8.0",
+ 		"compare-versions": "^3.5.0",
+ 		"env-cmd": "^9.0.3",
+ 		"jquery": "^3.4.1",
+-		"jquery-ui": "^1.12.1",
+ 		"localforage": "^1.7.3",
+ 		"lodash.clonedeep": "^4.5.0",
+ 		"lodash.isequal": "^4.5.0",
+ 		"lodash.mergewith": "^4.6.2",
+ 		"lodash.shuffle": "^4.2.0",
++		"rc-slider": "^10.5.0",
+ 		"react": "^16.8.6",
+ 		"react-chartjs-2": "^2.7.6",
+ 		"react-contextmenu": "^2.11.0",
+@@ -35,28 +34,21 @@
+ 		"react-redux": "^7.1.0",
+ 		"react-rnd": "^10.2.4",
+ 		"react-router-dom": "^5.0.1",
+-		"react-scripts": "3.0.1",
++		"react-scripts": "^5.0.1",
+ 		"react-simple-code-editor": "^0.9.14",
+ 		"react-string-replace": "^0.4.4",
+ 		"react-tooltip": "^4.2.7",
+ 		"redux": "^4.0.4",
+ 		"redux-promise-middleware": "^6.1.1",
+-		"semantic-ui-react": "^0.87.3",
++		"semantic-ui-react": "^2.1.5",
+ 		"sortablejs": "^1.10.2"
+ 	},
+ 	"scripts": {
+-		"copy:changelog": "cp CHANGELOG.md public/logs/",
+-		"prestart": "npm run copy:changelog",
+ 		"start": "env-cmd -e default,development craco start",
+-		"prebuild:development": "npm run copy:changelog",
+ 		"build:development": "env-cmd -e default,development craco build",
+-		"prebuild:staging": "npm run copy:changelog",
+ 		"build:staging": "env-cmd -e default,staging craco build",
+-		"prebuild:nonssl-staging": "npm run copy:changelog",
+ 		"build:nonssl-staging": "env-cmd -e default,staging,nonssl craco build",
+-		"prebuild:nonssl": "npm run copy:changelog",
+ 		"build:nonssl": "env-cmd -e default,production,nonssl craco build",
+-		"prebuild": "npm run copy:changelog",
+ 		"build": "env-cmd -e default,production craco build",
+ 		"test": "craco test",
+ 		"eject": "craco eject",
+@@ -81,8 +73,8 @@
+ 	"devDependencies": {
+ 		"@commitlint/cli": "^17.1.2",
+ 		"@commitlint/config-conventional": "^17.1.0",
+-		"@craco/craco": "5.2.4",
+-		"craco-less": "1.9.0",
++		"@craco/craco": "^7.1.0",
++		"@semantic-ui-react/craco-less": "^3.0.0",
+ 		"eslint": "^8.26.0",
+ 		"eslint-config-xo": "^0.42.0",
+ 		"eslint-formatter-summary-chart": "^0.2.1",
+@@ -90,7 +82,8 @@
+ 		"eslint-plugin-react": "^7.31.10",
+ 		"husky": "^8.0.1",
+ 		"pre-commit": "^1.2.2",
+-		"semantic-ui-less": "2.4.1"
++		"prop-types": "^15.8.1",
++		"semantic-ui-less": "^2.5.0"
+ 	},
+ 	"pre-commit": [
+ 		"eslint"
+diff --git a/public/index.html b/public/index.html
+index 622e72a..fab93da 100644
+--- a/public/index.html
++++ b/public/index.html
+@@ -1,24 +1,10 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ 	<head>
+-		<script>
+-		(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+-		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+-		})(window,document,'script','dataLayer','%REACT_APP_GOOGLE_TAG_MANAGER_ID%');
+-		</script>
+-
+ 		<meta charset="utf-8" />
+ 		<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+ 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+ 		<meta name="theme-color" content="#000000" />
+-		<!--
+-			manifest.json provides metadata used when your web app is installed on a
+-			user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+-		-->
+-		<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+-		<link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css">
+ 		<!--
+ 			Notice the use of %PUBLIC_URL% in the tags above.
+ 			It will be replaced with the URL of the `public` folder during the build.
+diff --git a/public/manifest.json b/public/manifest.json
+deleted file mode 100644
+index ac20c7e..0000000
+--- a/public/manifest.json
++++ /dev/null
+@@ -1,15 +0,0 @@
+-{
+-  "short_name": "Ember Overlay",
+-  "name": "Ember Overlay for Advanced Combat Tracker",
+-  "icons": [
+-    {
+-      "src": "favicon.ico",
+-      "sizes": "64x64 32x32 24x24 16x16",
+-      "type": "image/x-icon"
+-    }
+-  ],
+-  "start_url": ".",
+-  "display": "standalone",
+-  "theme_color": "#000000",
+-  "background_color": "#ffffff"
+-}
+diff --git a/src/components/Parser/Container/Import.js b/src/components/Parser/Container/Import.js
+index feed876..c5027b7 100644
+--- a/src/components/Parser/Container/Import.js
++++ b/src/components/Parser/Container/Import.js
+@@ -1,7 +1,7 @@
+ import React from "react";
+ import { connect } from "react-redux";
+ import { Form, Input, Button } from "semantic-ui-react";
+-import $ from "jquery";
++import jquery from "jquery";
+ 
+ import LocalizationService from "../../../services/LocalizationService";
+ 
+@@ -47,11 +47,11 @@ class Import extends React.Component {
+ 	}
+ 
+ 	getButtons() {
+-		return $(document).find("button.import");
++		return jquery(document).find("button.import");
+ 	}
+ 
+ 	getButton(e) {
+-		return $(e.target);
++		return jquery(e.target);
+ 	}
+ 
+ 	getInput(e, button) {
+diff --git a/src/components/Parser/PlayerTable.js b/src/components/Parser/PlayerTable.js
+index 7f003eb..07e2e2f 100644
+--- a/src/components/Parser/PlayerTable.js
++++ b/src/components/Parser/PlayerTable.js
+@@ -1,6 +1,6 @@
+ import React from "react";
+ import { connect } from "react-redux";
+-import $ from "jquery";
++import jquery from "jquery";
+ import { changeViewing, changeDetailPlayer, updateState } from "../../redux/actions/index";
+ 
+ import GameDataProcessor from "../../processors/GameDataProcessor";
+@@ -242,11 +242,11 @@ class PlayerTable extends React.Component {
+ 	}
+ 
+ 	updateBackgrounds() {
+-		const $table  = $(this.refs.player_table);
++		const $table  = jquery(this.refs.player_table);
+ 		const is_grid = $table.hasClass("grid");
+ 
+ 		$table.find(".row").each(function() {
+-			const $row = $(this);
++			const $row = jquery(this);
+ 			const $bar = $row.find(".percent-bar");
+ 
+ 			if (!$bar.length) {
+diff --git a/src/components/Parser/PlayerTable/OverlayInfo.js b/src/components/Parser/PlayerTable/OverlayInfo.js
+index 585859c..27b1501 100644
+--- a/src/components/Parser/PlayerTable/OverlayInfo.js
++++ b/src/components/Parser/PlayerTable/OverlayInfo.js
+@@ -1,8 +1,5 @@
+ import React from "react";
+ 
+-import DonationService from "../../../services/DonationService";
+-import VersionService from "../../../services/VersionService";
+-
+ class OverlayInfo extends React.Component {
+ 	UNSAFE_componentWillMount() {
+ 		// Hibiya OverlayPlugin: 45.0.2454.85
+@@ -25,21 +22,8 @@ class OverlayInfo extends React.Component {
+ 		}
+ 
+ 		this.setState({
+-			changelog : <p>Loading changelog...</p>,
+-			chrome    : browser_version,
++			chrome : browser_version,
+ 		});
+-
+-		VersionService.getLatestChangelogs(5)
+-			.then(data => {
+-				const changelog = VersionService.formatChangelog(data);
+-
+-				this.setState({
+-					changelog,
+-				});
+-			})
+-			.catch(e => {
+-				console.error(JSON.stringify(e));
+-			});
+ 	}
+ 
+ 	render() {
+@@ -47,13 +31,6 @@ class OverlayInfo extends React.Component {
+ 			<div id='overlay-info' ref={el => (this.instance = el)}>
+ 				<h3>Ember Overlay</h3>
+ 				{this.getInfoText()}
+-
+-				<div id='funding'>
+-					{this.getFundingText()}
+-				</div>
+-
+-				<h3>Latest Changes</h3>
+-				{this.state.changelog}
+ 			</div>
+ 		);
+ 	}
+@@ -75,83 +52,12 @@ class OverlayInfo extends React.Component {
+ 				return (
+ 					<React.Fragment>
+ 						<p>
+-							This section will disappear when an encounter begins.
++							开始战斗后本提示信息会自动隐藏。
+ 						</p>
+ 					</React.Fragment>
+ 				);
+ 		}
+ 	}
+-
+-	getFundingText() {
+-		const type = (["hibiya", "actws"].indexOf(this.state.chrome) === -1 || window.obsstudio) ? "new" : "old";
+-		const torn = Math.floor((Math.random() * 2) + 1);
+-
+-		switch (type) {
+-			case "old":
+-				return (
+-					<React.Fragment>
+-						<span onClick={this.openFundingLink.bind(this, "cash")} ref='cash'><img src='img/buttons/funding/cash.svg' alt='Donate on Cash App' height='20'/></span>
+-						<span onClick={this.openFundingLink.bind(this, "paypal")} ref='paypal'><img src='img/buttons/funding/paypal-resized.png' alt='Donate at PayPal' height='20'/></span>
+-						<span onClick={this.openFundingLink.bind(this, "paypay")} ref='paypay'><img src='img/buttons/funding/paypay.svg' alt='ペイペイで施してください' height='20'/></span>
+-						<span onClick={this.openFundingLink.bind(this, "kofi")} ref='kofi'><img src='img/buttons/funding/kofi.svg' alt='Donate at Ko-fi' height='20'/></span>
+-						<span onClick={this.openFundingLink.bind(this, "patreon")} ref='patreon'><img src='img/buttons/funding/patreon.png' alt='Donate at Patreon' height='20'/></span>
+-						<span onClick={this.openFundingLink.bind(this, "streamlabs")} ref='streamlabs'><img src='img/buttons/funding/streamlabs.svg' alt='Donate at Streamlabs' height='20'/></span>
+-					</React.Fragment>
+-				);
+-
+-			case "new":
+-			default:
+-				return (
+-					<React.Fragment>
+-						<span onClick={this.openAdLink.bind(this)} ref='ad'><img className='ad-cta' src={`img/buttons/funding/torn${torn}.png`} alt='Support Ember by clicking here'/></span>
+-						<p>Try out the text-based RPG Torn City.</p>
+-					</React.Fragment>
+-				);
+-		}
+-	}
+-
+-	openFundingLink(rel) {
+-		let url = "";
+-
+-		// Min for PayPal: Hibiya
+-		// Min for Streamlabs: ngld
+-		// Min for Ko-fi: Hibiya
+-		// Min for Patreon: ngld
+-		switch (this.state.chrome) {
+-			case "hibiya":
+-			case "actws":
+-				switch (rel) {
+-					case "paypal":
+-					case "kofi":
+-					case "cash":
+-					case "paypay":
+-						url = DonationService.getRealDonationLink(rel);
+-
+-						break;
+-
+-					default:
+-						url = DonationService.buildLocalDonationLink(rel);
+-
+-						break;
+-				}
+-
+-				break;
+-
+-			case "ngld":
+-			default:
+-				url = DonationService.getRealDonationLink(rel);
+-
+-				break;
+-		}
+-
+-		window.open(url, "", "width=600,height=530,location=yes,menubar=yes");
+-	}
+-
+-	openAdLink() {
+-		const url = "https://www.torn.com/1962321";
+-
+-		window.open(url, "", "width=1200,height=830,location=no,menubar=no");
+-	}
+ }
+ 
+ export default OverlayInfo;
+diff --git a/src/components/Settings.js b/src/components/Settings.js
+index 562af80..b19ed3c 100644
+--- a/src/components/Settings.js
++++ b/src/components/Settings.js
+@@ -5,39 +5,19 @@ import { Grid, Menu } from "semantic-ui-react";
+ 
+ import LocalizationService from "../services/LocalizationService";
+ import SettingsSchema from "../constants/SettingsSchema";
+-import TwitchAPIService from "../services/TwitchAPIService";
+ 
+ import Screen from "./Settings/Screen";
+ import Export from "./Settings/Export";
+ import About from "./Settings/About";
+-import Streamers from "./Settings/Streamers";
+ import Donate from "./Settings/Donate";
+ 
+ import "./../styles/components/settings/settings-theme.less";
+ 
+ class Settings extends React.Component {
+-	UNSAFE_componentWillMount() {
+-		TwitchAPIService.getLiveStreamers()
+-			.then(data => {
+-				this.setState({
+-					stream_type : data.type,
+-					streamers   : data.streamers,
+-				});
+-			})
+-			.catch(() => {});
+-	}
+-
+ 	render() {
+-		const base_url           = this.props.match.url;
+-		const nav_links          = [];
+-		const routes             = [];
+-		const streamers          = (this.state && this.state.streamers) ? this.state.streamers : {};
+-		const stream_type        = (this.state && this.state.stream_type) ? this.state.stream_type : "offline";
+-		const streamer_count     = (streamers) ? Object.keys(streamers).length : 0;
+-		const streamer_base_text = (streamer_count && stream_type === "live")
+-			? LocalizationService.getMisc((streamer_count > 1) ? "streamers_live" : "streamer_live")
+-			: LocalizationService.getMisc("streamers");
+-		const streamer_text      = streamer_base_text.replace("{{number}}", streamer_count);
++		const base_url  = this.props.match.url;
++		const nav_links = [];
++		const routes    = [];
+ 
+ 		for (
+ 			const section of
+@@ -69,7 +49,6 @@ class Settings extends React.Component {
+ 									{nav_links}
+ 									<NavLink to={base_url + "/export"} className='item'>{LocalizationService.getSettingsSectionText("export")}</NavLink>
+ 									<NavLink to={base_url + "/about"} className='item'>{LocalizationService.getSettingsSectionText("about")}</NavLink>
+-									<NavLink to={base_url + "/streamers"} className='streamers item'>{streamer_text}</NavLink>
+ 									<NavLink to={base_url + "/donate"} className='item'>Donate</NavLink>
+ 								</Menu>
+ 							</Grid.Column>
+@@ -80,7 +59,6 @@ class Settings extends React.Component {
+ 								{routes}
+ 								<Route path={base_url + "/export"} component={Export}/>
+ 								<Route path={base_url + "/about"} component={About}/>
+-								<Route path={base_url + "/streamers"} render={() => <Streamers streamers={streamers} type={stream_type}/>}/>
+ 								<Route path={base_url + "/donate"} component={Donate}/>
+ 							</Grid.Column>
+ 						</Grid.Row>
+diff --git a/src/components/Settings/About.js b/src/components/Settings/About.js
+index 0fd9132..608c95a 100644
+--- a/src/components/Settings/About.js
++++ b/src/components/Settings/About.js
+@@ -9,38 +9,10 @@ import SocialLink from "./About/SocialLink";
+ const reactStringReplace = require("react-string-replace");
+ 
+ class About extends React.Component {
+-	UNSAFE_componentWillMount() {
+-		this.setState({
+-			changelog : <p>Loading changelog...</p>,
+-		});
+-
+-		VersionService.getChangelogForUser()
+-			.then(data => {
+-				const changelog = VersionService.formatChangelog(data);
+-
+-				this.setState({
+-					changelog,
+-				});
+-			})
+-			.catch(e => {
+-				console.error(JSON.stringify(e));
+-			});
+-	}
+-
+ 	render() {
+-		const github_url    = process.env.REACT_APP_GITHUB_URL;
+-		const discord_url   = process.env.REACT_APP_DISCORD_URL;
+-		const author_url    = process.env.REACT_APP_AUTHOR_URL;
+-		const changelog_url = process.env.REACT_APP_CHANGELOG_URL;
+-
+-		const state                = this.state || {};
+-		const author_link          = <a href={author_url} target='_blank' rel='noopener noreferrer'>GoldenChrysus</a>;
+-		const changelog_cta        = LocalizationService.getMisc("changelog_cta");
+-		const changelog_link_match = changelog_cta.match(/{{changelog_link_open}}.+{{changelog_link_close}}/g)[0];
+-		const changelog_link_text  = changelog_link_match
+-			.replace("{{changelog_link_open}}", "")
+-			.replace("{{changelog_link_close}}", "");
+-		const changelog_link       = <a href={changelog_url} target='_blank' rel='noopener noreferrer'>{changelog_link_text}</a>;
++		const github_url  = process.env.REACT_APP_GITHUB_URL;
++		const author_url  = process.env.REACT_APP_AUTHOR_URL;
++		const author_link = <a href={author_url} target='_blank' rel='noopener noreferrer'>GoldenChrysus</a>;
+ 
+ 		return (
+ 			<React.Fragment>
+@@ -48,16 +20,6 @@ class About extends React.Component {
+ 					<h2>{LocalizationService.getSettingsSubsectionText("about", 0)}</h2>
+ 					<p>{reactStringReplace(LocalizationService.getMisc("developer_credit"), "{{developer}}", () => author_link)}</p>
+ 
+-					<h3>Discord</h3>
+-					<p>{LocalizationService.getMisc("discord_cta")}</p>
+-					<p>
+-						<a href={discord_url} target='_blank' rel='noopener noreferrer'>
+-							<img className='discord' src='img/buttons/discord.png' alt='Join our Discord server.' title='Join our Discord server.'/>
+-						</a>
+-					</p>
+-
+-					<p>{LocalizationService.getMisc("broken_link")} <span className='discord-link'>{discord_url}</span></p>
+-
+ 					<h3>GitHub</h3>
+ 					<p>
+ 						{LocalizationService.getMisc("github_cta")}<br/>
+@@ -96,14 +58,6 @@ class About extends React.Component {
+ 						</ul>
+ 					</p>
+ 				</Container>
+-				<Container fluid className='section-container'>
+-					<h2>{LocalizationService.getMisc("changelog")}</h2>
+-					<p>{LocalizationService.getMisc("changelog_info")}</p>
+-					<p>{reactStringReplace(changelog_cta, changelog_link_match, () => changelog_link)}</p>
+-
+-					<h3>{LocalizationService.getMisc("latest_changes")}</h3>
+-					{state.changelog}
+-				</Container>
+ 			</React.Fragment>
+ 		);
+ 	}
+diff --git a/src/components/Settings/Donate.js b/src/components/Settings/Donate.js
+index 29eb192..8dbc6e6 100644
+--- a/src/components/Settings/Donate.js
++++ b/src/components/Settings/Donate.js
+@@ -1,54 +1,18 @@
+ import React from "react";
+ import { Container } from "semantic-ui-react";
+-import $ from "jquery";
+-
+-import DonationService from "../../services/DonationService";
+ import SocialLink from "./About/SocialLink";
+ 
+-const querystring = require("querystring");
+ 
+ class Donate extends React.Component {
+-	constructor() {
+-		super();
+-
+-		const params = new querystring.parse(window.location.search);
+-		const type   = params.default || params["?default"];
+-
+-		this.state = {
+-			type,
+-		};
+-	}
+-
+-	componentDidMount() {
+-		if (this.state.type) {
+-			const type = this.state.type;
+-			const $url = $(this.refs[type]);
+-
+-			$url.focus();
+-			this.selectText(`donation-${type}`);
+-			$url.focus();
+-		}
+-	}
+-
+ 	render() {
+ 		return (
+ 			<React.Fragment>
+ 				<Container fluid className='section-container'>
+ 					<h2>Donate</h2>
+ 					<p>
+-						Copy one of the following URL&apos;s into your regular browser to make a donation.
+-						Donations are extremely appreciated, but this overlay will continue to be developed even without donations.
+-						If you would like your name to be included in the list of donors, please state this in the donation message.
+-						Thank you!
++						如果你喜欢该悬浮窗，请前往原作者的 GitHub 页面获取捐助地址：https://github.com/GoldenChrysus/ffxiv-ember-overlay#funding
+ 					</p>
+ 
+-					<div className='donation-link' data-type='cash' ref='cash' id='donation-cash'>{DonationService.getRealDonationLink("cash")}</div>
+-					<div className='donation-link' data-type='paypal' ref='paypal' id='donation-paypal'>{DonationService.getRealDonationLink("paypal")}</div>
+-					<div className='donation-link' data-type='paypay' ref='paypay' id='donation-paypay'>{DonationService.getRealDonationId("paypay")}</div>
+-					<div className='donation-link' data-type='kofi' ref='kofi' id='donation-kofi'>{DonationService.getRealDonationLink("kofi")}</div>
+-					<div className='donation-link' data-type='patreon' ref='patreon' id='donation-patreon'>{DonationService.getRealDonationLink("patreon")}</div>
+-					<div className='donation-link' data-type='streamlabs' ref='streamlabs' id='donation-streamlabs'>{DonationService.getRealDonationLink("streamlabs")}</div>
+-
+ 					<h2>Featured Donors</h2>
+ 					<p>Pimpy Shortstocking, FortiusTTV <SocialLink name='fortiusttv' type='twitch'/>, loski3, Vale Alania</p>
+ 
+@@ -58,27 +22,6 @@ class Donate extends React.Component {
+ 			</React.Fragment>
+ 		);
+ 	}
+-
+-	selectText(id) {
+-		const element = document.getElementById(id);
+-
+-		let range;
+-
+-		if (window.getSelection && document.createRange) {
+-			const selection = window.getSelection();
+-
+-			range = document.createRange();
+-
+-			range.selectNodeContents(element);
+-			selection.removeAllRanges();
+-			selection.addRange(range);
+-		} else if (document.body.createTextRange) {
+-			range = document.body.createTextRange();
+-
+-			range.moveToElementText(element);
+-			range.select();
+-		}
+-	}
+ }
+ 
+ export default Donate;
+diff --git a/src/components/Settings/Export.js b/src/components/Settings/Export.js
+index 48d9283..583fcf2 100644
+--- a/src/components/Settings/Export.js
++++ b/src/components/Settings/Export.js
+@@ -1,7 +1,7 @@
+ import React from "react";
+ import { connect } from "react-redux";
+ import { Container, Form, TextArea, Button } from "semantic-ui-react";
+-import $ from "jquery";
++import jquery from "jquery";
+ 
+ import LocalizationService from "../../services/LocalizationService";
+ 
+@@ -26,7 +26,7 @@ class Export extends React.Component {
+ 	}
+ 
+ 	handleCopy(e) {
+-		const $button = $(e.target);
++		const $button = jquery(e.target);
+ 		const text    = $button.closest(".field").find("textarea")[0];
+ 
+ 		text.focus();
+diff --git a/src/components/Settings/Screen.js b/src/components/Settings/Screen.js
+index 41cc02d..a623181 100644
+--- a/src/components/Settings/Screen.js
++++ b/src/components/Settings/Screen.js
+@@ -2,7 +2,7 @@ import React from "react";
+ import { connect } from "react-redux";
+ import { updateSetting } from "../../redux/actions/index";
+ import { Container, Form, Button } from "semantic-ui-react";
+-import $ from "jquery";
++import jquery from "jquery";
+ 
+ import LocalizationService from "../../services/LocalizationService";
+ 
+@@ -51,7 +51,7 @@ class Screen extends React.Component {
+ 					const new_value = [];
+ 
+ 					Array.prototype.forEach.call(document.getElementById(key_path).getElementsByTagName("a"), el => {
+-						new_value.push($(el).attr("value"));
++						new_value.push(jquery(el).attr("value"));
+ 					});
+ 
+ 					this.props.new_settings[key_path] = new_value;
+diff --git a/src/components/Settings/Screen/Inputs/Slider.js b/src/components/Settings/Screen/Inputs/Slider.js
+index f96d015..e96a024 100644
+--- a/src/components/Settings/Screen/Inputs/Slider.js
++++ b/src/components/Settings/Screen/Inputs/Slider.js
+@@ -1,51 +1,49 @@
+-import React from "react";
+-import $ from "jquery";
++import React, { useState } from "react";
++import RCSlider from "rc-slider";
++import "rc-slider/assets/index.css";
+ 
+-// eslint-disable-next-line
+-import UISlider from "jquery-ui/ui/widgets/slider";
++export default function Slider(props) {
++	const { label, minimum, maximum, key_path, onChange } = props;
++	const [value, setValue]                               = useState(props.value);
+ 
+-import "jquery-ui/themes/base/theme.css";
+-import "jquery-ui/themes/base/slider.css";
++	let reverse = false;
++	let range   = false;
+ 
+-class Slider extends React.Component {
+-	componentDidMount() {
+-		this.$elem = $(this.refs.slider);
+-
+-		const $elem = this.$elem;
+-
+-		this.$elem.slider({
+-			range : this.props.range,
+-			min   : this.props.minimum,
+-			max   : this.props.maximum,
+-			value : this.props.value,
+-			slide : (e, ui) => {
+-				const change_data = {
+-					key_path : this.props.key_path,
+-					value    : ui.value,
+-				};
+-
+-				this.props.onChange(e, change_data);
+-				$elem
+-					.closest("div.field")
+-					.find(".value")
+-					.text(ui.value);
+-			},
+-		});
++	switch (props.range) {
++		case "max":
++			reverse = true;
++			break;
++		case true:
++			range = true;
++			break;
++		default:
++			break;
+ 	}
+ 
+-	componentWillUnmount() {
+-		this.$elem.slider("destroy");
+-	}
+-
+-	shouldComponentUpdate() {
+-		return false;
+-	}
+-
+-	render() {
+-		return (
+-			<div ref='slider'></div>
+-		);
+-	}
++	return (
++		<>
++			<label>{label}: <span className='value'>{value}</span></label>
++			<RCSlider
++				range={range}
++				reverse={reverse}
++				min={minimum}
++				max={maximum}
++				value={value}
++				onChange={value => {
++					setValue(value);
++					onChange(null, { key_path, value });
++				}}
++				styles={{
++					rail   : { height : 10 },
++					track  : { height : 10 },
++					handle : {
++						height     : 16,
++						width      : 16,
++						marginLeft : -3,
++						marginTop  : -3,
++					},
++				}}
++			/>
++		</>
++	);
+ }
+-
+-export default Slider;
+diff --git a/src/components/Settings/Screen/Inputs/Table.js b/src/components/Settings/Screen/Inputs/Table.js
+index a2c6901..2858acb 100644
+--- a/src/components/Settings/Screen/Inputs/Table.js
++++ b/src/components/Settings/Screen/Inputs/Table.js
+@@ -1,6 +1,6 @@
+ import React from "react";
+ import clone from "lodash.clonedeep";
+-import $ from "jquery";
++import jquery from "jquery";
+ 
+ import LocalizationService from "../../../../services/LocalizationService";
+ 
+@@ -23,8 +23,8 @@ class Table extends React.Component {
+ 	}
+ 
+ 	handleSelectChange(e, data) {
+-		const $row    = $(document).find("#insert-row");
+-		const $target = (e.currentTarget.tagName === "DIV") ? $(e.currentTarget) : $row.find(".active.selected.item");
++		const $row    = jquery(document).find("#insert-row");
++		const $target = (e.currentTarget.tagName === "DIV") ? jquery(e.currentTarget) : $row.find(".active.selected.item");
+ 		const $select = $target.closest(".ui.dropdown");
+ 		const type    = data.value.split(".")[0];
+ 
+@@ -50,7 +50,7 @@ class Table extends React.Component {
+ 	}
+ 
+ 	handleInputChange(e) {
+-		const $this = $(e.currentTarget);
++		const $this = jquery(e.currentTarget);
+ 		const $row  = $this.closest("tr[data-key]");
+ 
+ 		if (!$row.length) {
+@@ -99,7 +99,7 @@ class Table extends React.Component {
+ 	}
+ 
+ 	getDeleteKey(e) {
+-		return $(e.currentTarget).closest("tr").attr("data-select-value");
++		return jquery(e.currentTarget).closest("tr").attr("data-select-value");
+ 	}
+ 
+ 	syncData() {
+diff --git a/src/components/Settings/Screen/Inputs/Table/MetricNameTable.js b/src/components/Settings/Screen/Inputs/Table/MetricNameTable.js
+index 40cefa7..135362e 100644
+--- a/src/components/Settings/Screen/Inputs/Table/MetricNameTable.js
++++ b/src/components/Settings/Screen/Inputs/Table/MetricNameTable.js
+@@ -1,6 +1,6 @@
+ import React from "react";
+ import { Button, Select, Input } from "semantic-ui-react";
+-import $ from "jquery";
++import jquery from "jquery";
+ 
+ import LocalizationService from "../../../../../services/LocalizationService";
+ import Table from "../Table";
+@@ -86,7 +86,7 @@ class MetricNameTable extends Table {
+ 	}
+ 
+ 	handleAdd(e) {
+-		const $target = $(e.currentTarget);
++		const $target = jquery(e.currentTarget);
+ 		const $row    = $target.closest("tr");
+ 		const $select = $row.find(".ui.dropdown");
+ 		const options = {
+@@ -111,7 +111,7 @@ class MetricNameTable extends Table {
+ 	}
+ 
+ 	getDeleteKey(e) {
+-		return $(e.currentTarget).closest("tr").attr("data-key");
++		return jquery(e.currentTarget).closest("tr").attr("data-key");
+ 	}
+ }
+ 
+diff --git a/src/components/Settings/Screen/Inputs/Table/SpellsUITable.js b/src/components/Settings/Screen/Inputs/Table/SpellsUITable.js
+index 5bbbbf1..fcb9b1d 100644
+--- a/src/components/Settings/Screen/Inputs/Table/SpellsUITable.js
++++ b/src/components/Settings/Screen/Inputs/Table/SpellsUITable.js
+@@ -1,7 +1,7 @@
+ import React from "react";
+ import { Button, Select } from "semantic-ui-react";
+ import clone from "lodash.clonedeep";
+-import $ from "jquery";
++import jquery from "jquery";
+ import Sortable from "sortablejs/modular/sortable.core.esm.js";
+ 
+ import LocalizationService from "../../../../../services/LocalizationService";
+@@ -211,7 +211,7 @@ class SpellsUITable extends Table {
+ 	}
+ 
+ 	getDeleteKey(e) {
+-		return $(e.currentTarget || e.target).closest("tr").attr("data-key");
++		return jquery(e.currentTarget || e.target).closest("tr").attr("data-key");
+ 	}
+ 
+ 	processSortable() {
+@@ -235,7 +235,7 @@ class SpellsUITable extends Table {
+ 						const uuid  = evt.target.getAttribute("data-uuid");
+ 
+ 						Array.prototype.forEach.call(evt.target.getElementsByTagName("a"), el => {
+-							value.push($(el).attr("value"));
++							value.push(jquery(el).attr("value"));
+ 						});
+ 
+ 						this.type_sort_data[uuid] = {};
+diff --git a/src/components/Settings/Screen/Inputs/Table/TTSRulesTable.js b/src/components/Settings/Screen/Inputs/Table/TTSRulesTable.js
+index 0662819..d2c4d62 100644
+--- a/src/components/Settings/Screen/Inputs/Table/TTSRulesTable.js
++++ b/src/components/Settings/Screen/Inputs/Table/TTSRulesTable.js
+@@ -1,6 +1,6 @@
+ import React from "react";
+ import { Button, Select, Input } from "semantic-ui-react";
+-import $ from "jquery";
++import jquery from "jquery";
+ 
+ import LocalizationService from "../../../../../services/LocalizationService";
+ import Table from "../Table";
+@@ -97,7 +97,7 @@ class TTSRulesTable extends Table {
+ 	}
+ 
+ 	handleAdd(e) {
+-		const $target = $(e.currentTarget);
++		const $target = jquery(e.currentTarget);
+ 		const $row    = $target.closest("tr");
+ 		const $select = $row.find(".ui.dropdown");
+ 		const options = {
+diff --git a/src/components/Settings/Screen/Section.js b/src/components/Settings/Screen/Section.js
+index 6a71848..87f2923 100644
+--- a/src/components/Settings/Screen/Section.js
++++ b/src/components/Settings/Screen/Section.js
+@@ -127,9 +127,9 @@ class Section extends React.Component {
+ 					const min   = setting_data.minimum || 0;
+ 					const max   = setting_data.maximum || 100;
+ 
+-					label = <label>{label_text}: <span className='value'>{value}</span></label>;
++					label = null;
+ 
+-					setting = <Slider range={range} minimum={min} maximum ={max} key_path={setting_data.key_path} value={value} onChange={this.props.changeCallback}/>;
++					setting = <Slider label={label_text} range={range} minimum={min} maximum ={max} key_path={setting_data.key_path} value={value} onChange={this.props.changeCallback}/>;
+ 
+ 					break;
+ 
+diff --git a/src/components/Settings/Streamers.js b/src/components/Settings/Streamers.js
+deleted file mode 100644
+index 9deed17..0000000
+--- a/src/components/Settings/Streamers.js
++++ /dev/null
+@@ -1,74 +0,0 @@
+-import React from "react";
+-import { Container } from "semantic-ui-react";
+-import $ from "jquery";
+-import shuffle from "lodash.shuffle";
+-
+-import LocalizationService from "../../services/LocalizationService";
+-
+-const reactStringReplace = require("react-string-replace");
+-
+-class Streamers extends React.Component {
+-	render() {
+-		const streamers      = this.props.streamers || {};
+-		const streamer_names = shuffle(Object.keys(streamers));
+-		const streamer_boxes = [];
+-		const discord_url    = process.env.REACT_APP_DISCORD_URL;
+-		const author_url     = process.env.REACT_APP_AUTHOR_URL;
+-
+-		for (const streamer_name of streamer_names) {
+-			let thumbnail = streamers[streamer_name];
+-
+-			thumbnail = thumbnail
+-				.replace("{width}", "1920")
+-				.replace("{height}", "1080");
+-
+-			streamer_boxes.push(
+-				<div className='row' key={streamer_name}>
+-					<a href={"https://twitch.tv/" + streamer_name} target='_blank' rel='noopener noreferrer'>
+-						<span className='name'>{streamer_name}</span>
+-						<img src={thumbnail} alt={streamer_name}/>
+-					</a>
+-				</div>,
+-			);
+-		}
+-
+-		const discord_link = <span key='discord-link' className='discord-link'>{discord_url}</span>;
+-		const author_link  = <span key='author-link' className='author-link'>{author_url}</span>;
+-		const offline_text = (this.props.type === "offline")
+-			? <p className='offline'>Looks like no one is live. Check out some Ember Overlay users below and follow them to receive notifications when they are live!</p>
+-			: "";
+-		let long_cta       = LocalizationService.getMisc("streamer_long_cta");
+-
+-		long_cta = reactStringReplace(long_cta, "{{discord_link}}", () => discord_link);
+-		long_cta = reactStringReplace(long_cta, "{{twitch_link}}", () => author_link);
+-
+-		return (
+-			<React.Fragment>
+-				<Container fluid className='section-container'>
+-					<h2>{LocalizationService.getMisc("streamers")}</h2>
+-					<p>{LocalizationService.getMisc("streamer_info")}</p>
+-					<p>
+-						<a href='/' className='info-link' onClick={this.toggleInfoDiv}>{LocalizationService.getMisc("streamer_short_cta")}</a>
+-						<span className='info-span' style={{ display : "none" }}>{long_cta}</span>
+-					</p>
+-					{offline_text}
+-					<div id='streamers'>
+-						{streamer_boxes}
+-					</div>
+-				</Container>
+-			</React.Fragment>
+-		);
+-	}
+-
+-	toggleInfoDiv(e) {
+-		e.preventDefault();
+-
+-		const $link = $(e.target);
+-		const $div  = $link.closest("p").find(".info-span");
+-
+-		$div.slideToggle();
+-		return false;
+-	}
+-}
+-
+-export default Streamers;
+diff --git a/src/data/Settings.js b/src/data/Settings.js
+index 6fd40c5..bf84ad4 100644
+--- a/src/data/Settings.js
++++ b/src/data/Settings.js
+@@ -32,7 +32,7 @@ const default_settings = {
+ 		hide_top_bar          : false,
+ 		decimal_accuracy      : 2,
+ 		shorten_thousands     : false,
+-		language              : "en",
++		language              : "cn",
+ 		auto_hide             : "disabled",
+ 		auto_hide_delay       : 0,
+ 		display_job_names     : false,
+diff --git a/src/data/locales/settings.json b/src/data/locales/settings.json
+index f7b3f70..84a0266 100644
+--- a/src/data/locales/settings.json
++++ b/src/data/locales/settings.json
+@@ -2236,18 +2236,6 @@
+ 			"ua" : "Розроблено {{developer}}.",
+ 			"ru" : "Разработан {{developer}}."
+ 		},
+-		"changelog"          : {
+-			"en" : "Changelog",
+-			"pt" : "Registro de Alterações",
+-			"cn" : "更新日志",
+-			"jp" : "変更履歴",
+-			"de" : "Änderungsprotokoll",
+-			"es" : "Historial de Cambios",
+-			"fr" : "Historique des Données",
+-			"kr" : "패치 내역",
+-			"ua" : "Список змін",
+-			"ru" : "Журнал изменений"
+-		},
+ 		"discord_cta"        : {
+ 			"en" : "Join the Discord to receive live updates from the developer, submit feature suggestions, get help with a bug or issue, or discuss FFXIV in general with other users.",
+ 			"pt" : "Junte-se ao servidor do Discord para receber atualizações ao vivo pelo desenvolvedor, enviar sugestões, pedir ajuda com bugs ou problemas, ou discutir FFXIV no geral com outros jogadores.",
+@@ -2356,78 +2344,6 @@
+ 			"ua" : "Виправлення помилок",
+ 			"ru" : "Исправления ошибок"
+ 		},
+-		"streamers"          : {
+-			"en" : "Streamers",
+-			"pt" : "Streamers",
+-			"cn" : "主播",
+-			"jp" : "配信者",
+-			"de" : "Streamer",
+-			"es" : "Streamers",
+-			"fr" : "Streamers",
+-			"kr" : "스트리머",
+-			"ua" : "Стрімери",
+-			"ru" : "Стримеры"
+-		},
+-		"streamer_live"      : {
+-			"en" : "{{number}} Streamer Live",
+-			"pt" : "{{number}} Streamer ao Vivo",
+-			"cn" : "{{number}}位主播直播中",
+-			"jp" : "{{number}}人配信中",
+-			"de" : "{{number}} Streamer Live",
+-			"es" : "{{number}} Streamer en Vivo",
+-			"fr" : "{{number}} Streamer en Live",
+-			"kr" : "{{number}} 명이 방송중",
+-			"ua" : "{{number}} Стрімер Онлайн",
+-			"ru" : "{{number}} Стример Онлайн"
+-		},
+-		"streamers_live"     : {
+-			"en" : "{{number}} Streamers Live",
+-			"pt" : "{{number}} Streamers ao Vivo",
+-			"cn" : "{{number}}位主播直播中",
+-			"jp" : "{{number}}人配信中",
+-			"de" : "{{number}} Streamer Live",
+-			"es" : "{{number}} Streamers en Vivo",
+-			"fr" : "{{number}} Streamers en Live ",
+-			"kr" : "{{number}} 명이 방송중",
+-			"ua" : "{{number}} Стрімери Онлайн",
+-			"ru" : "{{number}} Стримеров Онлайн"
+-		},
+-		"streamer_info"      : {
+-			"en" : "Twitch streamers who use Ember Overlay are featured here!",
+-			"pt" : "Streamers do Twitch que utilizam o Ember Overlay estão em destaque aqui!",
+-			"cn" : "这里展示的是正在使用Ember Overlay的Twitch主播！",
+-			"jp" : "エンバーオーバーレイを使ってる配信者はここで特集しちゃいます！",
+-			"de" : "Hier werden Twitch Streamer angezeigt, die Ember Overlay benutzen.",
+-			"es" : "Los streamers de Twitch que utilizan Ember Overlay son mencionados aquí!",
+-			"fr" : "Les streamers Twitch qui utilisent Ember Overlay sont ici!",
+-			"kr" : "엠버 오버레이를 애용해주시는 트위치 스트리머분들은 여기에 특별히 표기됩니다!",
+-			"ua" : "Тут представлені стрімери Twitch, які використовують Ember Overlay!",
+-			"ru" : "Здесь представлены стримеры Twitch, использующие Ember Overlay!"
+-		},
+-		"streamer_short_cta" : {
+-			"en" : "Are you a streamer or do you know a streamer who uses Ember Overlay?",
+-			"pt" : "Você é um Streamer ou conhece um que use o Ember Overlay?",
+-			"cn" : "您也或您知道其他主播也在使用Ember Overlay进行直播？",
+-			"jp" : "貴方やご存じの方はエンバーオーバーレイを使って配信してますか？",
+-			"de" : "Bist du ein Streamer oder kennst du einen Streamer, der Ember Overlay verwendet?",
+-			"es" : "Eres un streamer o conoces a un streamer que utiliza Ember Overlay?",
+-			"fr" : "Es-tu un streamer ou connais-tu un streamer utilisant Ember Overlay?",
+-			"kr" : "엠버 오버레이를 사용해주시는 스트리머이시거나 혹은 해당하는 스트리머를 아시나요?",
+-			"ua" : "Ви стрімер або знаєте стрімера, який використовує Ember Overlay?",
+-			"ru" : "Вы стример или знаете стримера, который использует Ember Overlay?"
+-		},
+-		"streamer_long_cta"  : {
+-			"en" : "Have the stream added to this list by joining our Discord at {{discord_link}} and posting the stream in #streamer-requests. You can also message {{twitch_link}} with your stream info. The stream is only eligible for inclusion if Ember Overlay is used on stream (will be verified via VOD's).",
+-			"pt" : "Tenha seu stream adicionado à essa lista se juntando ao nosso discord em {{discord_link}} e postando a stream em #streamer-requests. Também é possível enviar uma mensagem para {{twitch_link}} com seus dados de stream. O stream será autorizado apenas se o Ember Overlay estiver sendo utilizado (será verificado via VOD's)",
+-			"cn" : "通过{{discord_link}}加入我们的Discord并在#streamer-requests中发布您的直播地址，可将您的直播添加到此列表中。 您也可以私信{{twitch_link}}发送你的直播信息。 您需要在直播中使用Ember Overlay（将通过直播录像验证）来获得在此显示的资格。",
+-			"jp" : "{{discord_link}}のディスコの#streamer-requestsか{{twitch_link}}のDMで配信情報を教えてくれたらリストに加えます。エンバーオーバーレイが配信で見える必要があります（過去の配信で確認します）。",
+-			"de" : "Füge den Stream dieser Liste hinzu, indem du unserem Discord unter {{discord_link}} beitrittst und den Stream in #streamer-requests postest. Du kannst außerdem {{twitch_link}} mit der Stream Info anschreiben. Der Stream wird jedoch nur in Betracht gezogen, falls das Ember Overlay im Stream benutzt wird (Verifizierung erfolgt über VODs).",
+-			"es" : "Haz que el stream sea agregado a esta lista entrando a nuestro discord en {{discord_link}} y posteando el stream en #streamer-requests. Puedes también mandar un mensaje a {{twitch_link}} Con la información de tu stream. El stream es elegible si Ember Overlay es utilizado en el stream (será verificado via VOD's).",
+-			"fr" : "Pour avoir son stream ajouté à la liste, il faut rejoindre notre Discord sur {{discord_link}} et poster le stream sur #streamer-requests. Tu peux aussi envoyer un message {{twitch_link}} avec tes renseignements de stream. Le stream sera inclus si Ember Overlay est utilisé sur le stream (sera vérifié via la VOD).",
+-			"kr" : "엠버 오버레이 디스코드 링크 {{discord_link}} 에 들어오셔셔 #streamer-requests을 통해 알려주세요. 혹은 트위치 내에서 {{twitch_link}}를 통해 직접 메세지를 보내주셔도 좋스니다. 이는 오직 엠버 오버레이를 사용해주실 때만 적용됩니다. (방송 기록으로 확인 가능)",
+-			"ua" : "Стрім буде доданий до цього списку після приєднання до нашого Discord серверу за адресою {{discord_link}} та опублікування стріму в #streamer-requests. Ви також можете надіслати {{twitch_link}} інформацію про вашу трансляцію. Стрім може бути включений лише в тому випадку, якщо в трансляції використовується Ember Overlay (буде перевірено через VOD).",
+-			"ru" : "Чтобы добавить стрим в этот список, присоединитесь к нашему Discord по адресу {{discord_link}} и опубликуйте стрим в #streamer-requests. Вы также можете написать сообщение {{twitch_link}} с информацией о стриме. Стрим может быть включен в список только в том случае, если на стриме используется Ember Overlay (будет проверено по VOD'ам)."
+-		},
+ 		"criteria" : {
+ 			"en" : "Criteria",
+ 			"pt" : "Critério",
+diff --git a/src/index.css b/src/index.css
+index f2ef8dd..85fa361 100644
+--- a/src/index.css
++++ b/src/index.css
+@@ -5,7 +5,7 @@ body {
+ 	padding: 0;
+ 	height: 100%;
+ 	overflow: hidden;
+-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
++	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+ 	-webkit-font-smoothing: antialiased;
+ 	-moz-osx-font-smoothing: grayscale;
+ }
+diff --git a/src/redux/reducers/index.js b/src/redux/reducers/index.js
+index 9ffa939..a056789 100644
+--- a/src/redux/reducers/index.js
++++ b/src/redux/reducers/index.js
+@@ -16,16 +16,10 @@ import SpellService from "../../services/SpellService";
+ 
+ import PVPZoneData from "../../constants/PVPZoneData";
+ 
+-const querystring = require("querystring");
+-
+-const params                = new querystring.parse(String(window.location.search).substring(1));
++const params                = new URLSearchParams(String(window.location.search).substring(1));
+ const overlayplugin_service = new OverlayPluginService();
+ const uuid                  = (window.OverlayPluginApi) ? window.OverlayPluginApi.overlayUuid : "browser";
+ 
+-if (typeof params.mode === "object") {
+-	params.mode = params.mode[0];
+-}
+-
+ const initial_state = {
+ 	plugin_service : new PluginService(),
+ 	settings_data  : Settings,
+@@ -60,7 +54,7 @@ const initial_state = {
+ 		overlayplugin        : overlayplugin_service.isOverlayPlugin(),
+ 		overlayplugin_author : overlayplugin_service.getAuthor(),
+ 		new_version          : false,
+-		mode                 : params.mode || localStorage.getItem(`${uuid}-mode`) || "stats",
++		mode                 : params.get('mode') || localStorage.getItem(`${uuid}-mode`) || "stats",
+ 		ui_builder           : false,
+ 		toggles              : {
+ 			top_left     : false,
+diff --git a/src/semantic-ui/site/globals/site.overrides b/src/semantic-ui/site/globals/site.overrides
+index cba59ef..8af2423 100644
+--- a/src/semantic-ui/site/globals/site.overrides
++++ b/src/semantic-ui/site/globals/site.overrides
+@@ -1,3 +1,6 @@
+ /*******************************
+          Site Overrides
+ *******************************/
++
++@importGoogleFonts : false;
++@fontName          : -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+diff --git a/src/semantic-ui/site/globals/site.variables b/src/semantic-ui/site/globals/site.variables
+index 3b5dc7d..0c7a46e 100644
+--- a/src/semantic-ui/site/globals/site.variables
++++ b/src/semantic-ui/site/globals/site.variables
+@@ -1,3 +1,4 @@
+ /*******************************
+      User Global Variables
+-*******************************/
+\ No newline at end of file
++*******************************/
++@importGoogleFonts : false;
+diff --git a/src/semantic-ui/theme.config b/src/semantic-ui/theme.config
+index c17d1d2..3b942a6 100644
+--- a/src/semantic-ui/theme.config
++++ b/src/semantic-ui/theme.config
+@@ -90,6 +90,7 @@
+ 
+ @import (multiple) "~semantic-ui-less/theme.less";
+ 
++@importGoogleFonts : false;
+ @fontPath : '../../../themes/@{theme}/assets/fonts';
+ 
+ /* End Config */
+diff --git a/src/services/DiscordService.js b/src/services/DiscordService.js
+index db7ee65..25d0f04 100644
+--- a/src/services/DiscordService.js
++++ b/src/services/DiscordService.js
+@@ -1,6 +1,6 @@
+ import PlayerProcessor from "../processors/PlayerProcessor";
+ import store from "../redux/store";
+-import $ from "jquery";
++import jquery from "jquery";
+ import LocalizationService from "./LocalizationService";
+ 
+ class DiscordService {
+@@ -82,7 +82,7 @@ class DiscordService {
+ 			(Number(state.internal.game.Encounter.encdps)).toLocaleString(undefined, { minimumFractionDigits : 0, maximumFractionDigits : 0 }),
+ 		);
+ 
+-		$.ajax({
++		jquery.ajax({
+ 			contentType : "application/json",
+ 			data        : JSON.stringify(data),
+ 			method      : "POST",
+diff --git a/src/services/DonationService.js b/src/services/DonationService.js
+deleted file mode 100644
+index 59192ad..0000000
+--- a/src/services/DonationService.js
++++ /dev/null
+@@ -1,24 +0,0 @@
+-class DonationService {
+-	buildLocalDonationLink(rel) {
+-		let search       = window.location.search || "";
+-		const search_add = (search.slice(0, 1) === "?") ? "&" : "?";
+-
+-		search += search_add + `default=${rel}`;
+-
+-		return window.location.pathname + search + "#/settings/donate";
+-	}
+-
+-	getRealDonationLink(rel) {
+-		rel = rel.toUpperCase();
+-
+-		return process.env[`REACT_APP_${rel}_DONATE_LINK`];
+-	}
+-
+-	getRealDonationId(rel) {
+-		rel = rel.toUpperCase();
+-
+-		return process.env[`REACT_APP_${rel}_DONATE_ID`];
+-	}
+-}
+-
+-export default new DonationService();
+diff --git a/src/services/PluginService/SocketService.js b/src/services/PluginService/SocketService.js
+index 73b8108..afa1d1a 100644
+--- a/src/services/PluginService/SocketService.js
++++ b/src/services/PluginService/SocketService.js
+@@ -3,8 +3,6 @@ import MessageProcessor from "../../processors/MessageProcessor";
+ import store from "../../redux/store/index";
+ import { updateState } from "../../redux/actions/index";
+ 
+-const querystring = require("querystring");
+-
+ const BASE_RECONNECT_DELAY = 300;
+ 
+ class SocketService {
+@@ -18,8 +16,8 @@ class SocketService {
+ 	}
+ 
+ 	processUri() {
+-		const params = new querystring.parse(String(window.location.search).substring(1));
+-		let uri      = params.HOST_PORT || params.OVERLAY_WS;
++		const params = new URLSearchParams(String(window.location.search).substring(1));
++		let uri      = params.get("HOST_PORT") || params.get("OVERLAY_WS");
+ 
+ 		if (!uri) {
+ 			return false;
+diff --git a/src/services/ThemeService.js b/src/services/ThemeService.js
+index 3d43827..b23331e 100644
+--- a/src/services/ThemeService.js
++++ b/src/services/ThemeService.js
+@@ -1,4 +1,4 @@
+-import $ from "jquery";
++import jquery from "jquery";
+ 
+ class ThemeService {
+ 	mode_classes = [
+@@ -7,20 +7,20 @@ class ThemeService {
+ 	];
+ 
+ 	setTheme(theme) {
+-		$("body").attr("theme", theme);
++		jquery("body").attr("theme", theme);
+ 	}
+ 
+ 	toggleHorizontal(active) {
+-		$("body").toggleClass("horizontal", active);
++		jquery("body").toggleClass("horizontal", active);
+ 	}
+ 
+ 	toggleMinimal(active) {
+-		$("body").toggleClass("minimal", active);
++		jquery("body").toggleClass("minimal", active);
+ 	}
+ 
+ 	setMode(new_mode) {
+ 		for (const mode of this.mode_classes) {
+-			$("body").toggleClass(`mode-${mode}`, (mode === new_mode));
++			jquery("body").toggleClass(`mode-${mode}`, (mode === new_mode));
+ 		}
+ 	}
+ }
+diff --git a/src/services/TwitchAPIService.js b/src/services/TwitchAPIService.js
+deleted file mode 100644
+index 143b91a..0000000
+--- a/src/services/TwitchAPIService.js
++++ /dev/null
+@@ -1,28 +0,0 @@
+-import $ from "jquery";
+-
+-class TwitchAPIService {
+-	getLiveStreamers() {
+-		return new Promise((resolve, reject) => {
+-			$.get("data/streamers.txt")
+-				.then(res => {
+-					const usernames = res.split(",");
+-
+-					$.get({
+-						url : `https://chrysus.xyz/games/ffxiv/ember-overlay/scripts/streamers.php?usernames=${usernames}`,
+-					})
+-						.then(res => {
+-							resolve(res);
+-						})
+-						.catch(e => {
+-							reject(e);
+-						});
+-				})
+-				.catch(e => {
+-					console.error(JSON.stringify(e));
+-					reject(e);
+-				});
+-		});
+-	}
+-}
+-
+-export default new TwitchAPIService();
+diff --git a/src/services/VersionService.js b/src/services/VersionService.js
+index 6c5b46c..a1ffbb6 100644
+--- a/src/services/VersionService.js
++++ b/src/services/VersionService.js
+@@ -1,15 +1,7 @@
+-import React from "react";
+ import store from "../redux/store/index";
+ import { updateSetting, updateState } from "../redux/actions/index";
+-import { Container } from "semantic-ui-react";
+-import $ from "jquery";
+-import Parser from "changelog-parser";
+ import compareVersions from "compare-versions";
+ 
+-import LocalizationService from "./LocalizationService";
+-
+-const no_changes = "No changes since your last visit.";
+-
+ class VersionService {
+ 	getSystemVersion() {
+ 		return process.env.REACT_APP_VERSION;
+@@ -53,158 +45,6 @@ class VersionService {
+ 		store.dispatch(updateState(new_data));
+ 		return true;
+ 	}
+-
+-	formatChangelog(data) {
+-		let changelog = [];
+-
+-		if (typeof data === "string") {
+-			changelog = <p>{data}</p>;
+-		} else {
+-			for (const item_type in data) {
+-				let count   = 0;
+-				const items = data[item_type].map(item => {
+-					count++;
+-
+-					return <li key={item_type + "-" + count}>{item}</li>;
+-				});
+-
+-				const ul = <ul>{items}</ul>;
+-
+-				changelog.push(
+-					<Container fluid className='changelog-section' key={item_type + "-section"}>
+-						<h4>{item_type}</h4>
+-						{ul}
+-					</Container>,
+-				);
+-			}
+-		}
+-
+-		return changelog;
+-	}
+-
+-	getChangelogForUser() {
+-		return new Promise((resolve, reject) => {
+-			const last_user_version = this.getLastUserVersion();
+-
+-			if (compareVersions.compare(this.getSystemVersion(), last_user_version, ">")) {
+-				this.parseChangelog()
+-					.then(data => {
+-						resolve(this.processChangelog(data, last_user_version));
+-					})
+-					.catch(e => {
+-						console.error(JSON.stringify(e));
+-						reject(e);
+-					});
+-				return;
+-			}
+-
+-			resolve(no_changes);
+-		});
+-	}
+-
+-	getLatestChangelogs(count) {
+-		return new Promise((resolve, reject) => {
+-			this.parseChangelog()
+-				.then(data => {
+-					resolve(this.processChangelog(data, undefined, count));
+-				})
+-				.catch(e => {
+-					console.error(JSON.stringify(e));
+-					reject(e);
+-				});
+-		});
+-	}
+-
+-	processChangelog(data, minimum_version, max_version_count) {
+-		const final_data = {
+-			Features     : [],
+-			"UI Changes" : [],
+-			"Bug Fixes"  : [],
+-		};
+-
+-		for (const i in data.versions) {
+-			const version_data = data.versions[i];
+-			const version      = version_data.version;
+-
+-			if ((minimum_version && compareVersions.compare(version, minimum_version, "<=")) || (max_version_count && Number(i) === (max_version_count - 1))) {
+-				break;
+-			}
+-
+-			for (const item_type in version_data.parsed) {
+-				if (!final_data[item_type]) {
+-					continue;
+-				}
+-
+-				final_data[item_type] = final_data[item_type].concat(version_data.parsed[item_type]);
+-			}
+-		}
+-
+-		let has_changes = false;
+-
+-		for (const item_type in final_data) {
+-			final_data[item_type] = final_data[item_type].filter(item => (["N/A", "?"].indexOf(item.trim()) === -1));
+-
+-			if (!has_changes) {
+-				has_changes = (final_data[item_type].length > 0);
+-			}
+-
+-			if (final_data[item_type].length === 0) {
+-				delete final_data[item_type];
+-			}
+-
+-			if (has_changes) {
+-				for (const item_type in final_data) {
+-					let translated_type = item_type;
+-
+-					switch (item_type) {
+-						case "Features":
+-							translated_type = LocalizationService.getMisc("features");
+-
+-							break;
+-
+-						case "UI Changes":
+-							translated_type = LocalizationService.getMisc("ui_changes");
+-
+-							break;
+-
+-						case "Bug Fixes":
+-							translated_type = LocalizationService.getMisc("bug_fixes");
+-
+-							break;
+-
+-						default:
+-							break;
+-					}
+-
+-					if (translated_type !== item_type) {
+-						final_data[translated_type] = JSON.parse(JSON.stringify(final_data[item_type]));
+-
+-						delete final_data[item_type];
+-					}
+-				}
+-			}
+-		}
+-
+-		return (has_changes) ? final_data : no_changes;
+-	}
+-
+-	parseChangelog() {
+-		return new Promise((resolve, reject) => {
+-			$.get("logs/CHANGELOG.md")
+-				.done(data => {
+-					Parser({
+-						text : data,
+-					})
+-						.then(result => {
+-							resolve(result);
+-						})
+-						.catch(e => {
+-							console.error(JSON.stringify(e));
+-							reject(e);
+-						});
+-				});
+-		});
+-	}
+ }
+ 
+ export default new VersionService();
+diff --git a/src/styles/components/settings/common/settings.less b/src/styles/components/settings/common/settings.less
+index 18c99ab..652c11f 100644
+--- a/src/styles/components/settings/common/settings.less
++++ b/src/styles/components/settings/common/settings.less
+@@ -394,8 +394,20 @@ body #settings-container p * {
+ 	);
+ }
+ 
+-#settings-container #settings-screen .section-container .field > .ui-slider {
+-	border: 0;
++#settings-container #settings-screen .section-container .field > .rc-slider {
++	.rc-slider-rail {
++		.setThemeStyle(
++			{
++				background: @dark_footerActiveLinkBackground;
++			},
++			{
++				background: @light_footerActiveLinkBackground;
++			},
++			@classicTheme: {
++				background: @classic_footerActiveLinkBackground;
++			}
++		);
++	}
+ 
+ 	.setThemeStyle(
+ 		{

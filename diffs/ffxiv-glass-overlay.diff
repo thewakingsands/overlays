@@ -1,0 +1,17 @@
+diff --git a/index.html b/index.html
+index 8ab89fa..7329948 100644
+--- a/index.html
++++ b/index.html
+@@ -5,10 +5,8 @@
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <meta name="theme-color" content="#0a0812" />
+   <title>FFXIV Glass Overlay</title>
+-  <link rel="preconnect" href="https://fonts.googleapis.com">
+-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+-  <script src="https://overlayplugin.github.io/OverlayPlugin/assets/shared/common.min.js"></script>
++  <link rel="stylesheet" href="https://overlays.ffcafe.cn/fonts/inter.css">
++  <script src="https://overlays.ffcafe.cn/assets/overlayplugin/common.min.js"></script>
+ </head>
+ <body>
+   <div id="root"></div>

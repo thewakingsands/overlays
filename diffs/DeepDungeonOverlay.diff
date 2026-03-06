@@ -1,0 +1,40 @@
+diff --git a/overlay/index.html b/overlay/index.html
+index e33c072..bb7eff4 100644
+--- a/overlay/index.html
++++ b/overlay/index.html
+@@ -4,7 +4,7 @@
+     <title>Deep Dungeon Overlay</title>
+     <link rel="stylesheet" href="css/display.css?v=Orthos-0.1.2" />    
+ 
+-    <script src="https://ngld.github.io/OverlayPlugin/assets/shared/common.min.js"></script>
++    <script src="https://overlays.ffcafe.cn/assets/overlayplugin/common.min.js"></script>
+     <script src="lib/DDO.js?v=Orthos-0.1.2"></script>
+     <script src="lib/Data.js?v=Orthos-0.1.2"></script>
+     <script src="lib/Locale.js?v=Orthos-0.1.2"></script>
+@@ -275,4 +275,4 @@
+ -->
+     </div>
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+diff --git a/overlay/targetinfo/index.html b/overlay/targetinfo/index.html
+index e0965c5..6838c2c 100644
+--- a/overlay/targetinfo/index.html
++++ b/overlay/targetinfo/index.html
+@@ -4,7 +4,7 @@
+     <title>Deep Dungeon Overlay</title>
+     <link rel="stylesheet" href="../css/targetinfo.css?v=Orthos-0.1.2" />    
+ 
+-    <script src="https://ngld.github.io/OverlayPlugin/assets/shared/common.min.js"></script>
++    <script src="https://overlays.ffcafe.cn/assets/overlayplugin/common.min.js"></script>
+     <script> window.DDO = {};</script>
+     <script src="../lib/Locale.js?v=Orthos-0.1.2"></script>
+     <script src="../lib/Bestiary.js?v=Orthos-0.1.2"></script>
+@@ -196,4 +196,4 @@
+     -->
+ </div>
+ </body>
+-</html>
+\ No newline at end of file
++</html>

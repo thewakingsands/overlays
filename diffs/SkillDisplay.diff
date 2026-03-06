@@ -1,0 +1,35 @@
+diff --git a/src/Action.js b/src/Action.js
+index 2a79457..119d747 100644
+--- a/src/Action.js
++++ b/src/Action.js
+@@ -68,7 +68,7 @@ export default function Action({ actionId, additionalClasses }) {
+ 
+ 		let current = true
+ 		void (async () => {
+-			const data = await (await fetch(`https://xivapi.com/Action/${actionId}?columns=Icon,Name,ActionCategoryTargetID`, {
++			const data = await (await fetch(`https://cafemaker.wakingsands.com/Action/${actionId}?columns=Icon,Name,ActionCategoryTargetID`, {
+ 				mode: "cors"
+ 			})).json()
+ 			if (current) {
+@@ -94,7 +94,7 @@ export default function Action({ actionId, additionalClasses }) {
+ 					? `gcd ${additionalClasses}`
+ 					: `ogcd ${additionalClasses}`
+ 			}
+-			src={`https://xivapi.com/${apiData.Icon}`}
++			src={`https://cafemaker.wakingsands.com/${apiData.Icon}`}
+ 			alt={apiData.Name || ""}
+ 		/>
+ 	)
+diff --git a/src/App.js b/src/App.js
+index 06f9b11..e5a6816 100644
+--- a/src/App.js
++++ b/src/App.js
+@@ -82,7 +82,7 @@ export default function App() {
+ 			const action = parseInt(logParameter3, 16)
+ 
+ 			if ( //sanity check the tea sis period wig snapped
+-				((action < 9 || action > 30000) && //is not a combat action
++				((action < 9 || action > 40000) && //is not a combat action
+                 (action < 100001 || action > 100300)) || //and is not a crafting action
+ 				(logTimestamp === lastTimestamp && action === lastAction) //or this action is a bug/duplicate
+ 			)
