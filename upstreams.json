@@ -1,0 +1,98 @@
+[
+  {
+    "dir": "amethyst",
+    "fork_url": "https://github.com/ffcafe-overlays/FancyDetail.git",
+    "upstream_url": "https://github.com/lalafellsleep/FancyDetail.git",
+    "upstream_branch": "stable"
+  },
+  {
+    "dir": "canisminor",
+    "fork_url": "https://github.com/ffcafe-overlays/ffxiv-cmskin.git",
+    "upstream_url": "https://github.com/canisminor1990/ffxiv-cmskin.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "DeepDungeonOverlay",
+    "fork_url": "https://github.com/ffcafe-overlays/DeepDungeonOverlay.git",
+    "upstream_url": "https://github.com/iamlokken/DeepDungeonOverlay.git",
+    "upstream_branch": "main"
+  },
+  {
+    "dir": "ember",
+    "fork_url": "https://github.com/ffcafe-overlays/ffxiv-ember-overlay.git",
+    "upstream_url": "https://github.com/GoldenChrysus/ffxiv-ember-overlay.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "faceroll",
+    "fork_url": "https://github.com/ffcafe-overlays/facerolloverlay.git",
+    "upstream_url": "https://github.com/miranquil/facerolloverlay.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "ffxiv-glass-overlay",
+    "fork_url": "https://github.com/ffcafe-overlays/ffxiv-glass-overlay.git",
+    "upstream_url": "https://github.com/piousvenom/ffxiv-glass-overlay.git",
+    "upstream_branch": "main"
+  },
+  {
+    "dir": "horizoverlay",
+    "fork_url": "https://github.com/ffcafe-overlays/horizoverlay.git",
+    "upstream_url": "https://github.com/bsides/horizoverlay.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "ikegami",
+    "fork_url": "https://github.com/ffcafe-overlays/ikegami.git",
+    "upstream_url": "https://github.com/hibiyasleep/ikegami.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "kagerou",
+    "fork_url": "https://github.com/ffcafe-overlays/kagerou.git",
+    "upstream_url": "https://github.com/hibiyasleep/kagerou.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "klondike",
+    "fork_url": "https://github.com/ffcafe-overlays/klondike.git",
+    "upstream_url": "https://github.com/kalilistic/klondike.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "mopimopi",
+    "fork_url": "https://github.com/ffcafe-overlays/mopimopi.git",
+    "upstream_url": "https://github.com/miranquil/mopimopizhhkcn.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "mopimopi2",
+    "fork_url": "https://github.com/ffcafe-overlays/mopimopi2.git",
+    "upstream_url": "https://github.com/HAERUHAERU/mopimopi.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "Next-UI",
+    "fork_url": "https://github.com/ffcafe-overlays/Next-UI.git",
+    "upstream_url": "https://github.com/kaminaris/Next-UI.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "SkillDisplay",
+    "fork_url": "https://github.com/ffcafe-overlays/SkillDisplay",
+    "upstream_url": "https://github.com/Rawrington/SkillDisplay.git",
+    "upstream_branch": "master"
+  },
+  {
+    "dir": "skyline",
+    "fork_url": "https://github.com/ffcafe-overlays/skyline-overlay.git",
+    "upstream_url": "https://github.com/dsrkafuu/skyline-overlay.git",
+    "upstream_branch": "main"
+  },
+  {
+    "dir": "zeffui",
+    "fork_url": "https://github.com/ffcafe-overlays/ZeffUI.git",
+    "upstream_url": "https://github.com/Zeffuro/ZeffUI.git",
+    "upstream_branch": "master"
+  }
+]

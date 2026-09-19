@@ -48,11 +48,11 @@
 	branch = master
 [submodule "DeepDungeonOverlay"]
 	path = DeepDungeonOverlay
-	url = https://github.com/iamlokken/DeepDungeonOverlay.git
+	url = https://github.com/ffcafe-overlays/DeepDungeonOverlay.git
 	branch = cn
 [submodule "klondike"]
 	path = klondike
-	url = https://github.com/kalilistic/klondike.git
+	url = https://github.com/ffcafe-overlays/klondike.git
 	branch = cn
 [submodule "ffxiv-glass-overlay"]
 	path = ffxiv-glass-overlay
@@ -60,5 +60,5 @@
 	branch = cn
 [submodule "Next-UI"]
 	path = Next-UI
-	url = https://github.com/kaminaris/Next-UI.git
+	url = https://github.com/ffcafe-overlays/Next-UI.git
 	branch = cn
