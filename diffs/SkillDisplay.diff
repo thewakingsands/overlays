@@ -1,22 +1,35 @@
 diff --git a/src/Action.js b/src/Action.js
-index 2a79457..119d747 100644
+index 2a79457..7e26834 100644
 --- a/src/Action.js
 +++ b/src/Action.js
-@@ -68,7 +68,7 @@ export default function Action({ actionId, additionalClasses }) {
+@@ -68,12 +68,12 @@ export default function Action({ actionId, additionalClasses }) {
  
  		let current = true
  		void (async () => {
 -			const data = await (await fetch(`https://xivapi.com/Action/${actionId}?columns=Icon,Name,ActionCategoryTargetID`, {
-+			const data = await (await fetch(`https://cafemaker.wakingsands.com/Action/${actionId}?columns=Icon,Name,ActionCategoryTargetID`, {
++			const data = await (await fetch(`https://xivapi-v2.xivcdn.com/api/sheet/Action/${actionId}?fields=Icon,Name,ActionCategory`, {
  				mode: "cors"
- 			})).json()
+-			})).json()
++			})).json();
  			if (current) {
-@@ -94,7 +94,7 @@ export default function Action({ actionId, additionalClasses }) {
+-				actionMap.set(actionId, data)
+-				setApiData(data)
++				actionMap.set(actionId, data.fields)
++				setApiData(data.fields)
+ 			}
+ 		})()
+ 
+@@ -90,11 +90,11 @@ export default function Action({ actionId, additionalClasses }) {
+ 		<img
+ 			className={
+ 				gcdOverrides.has(actionId) ||
+-				(!ogcdOverrides.has(actionId) && apiData.ActionCategoryTargetID !== 4)
++				(!ogcdOverrides.has(actionId) && apiData.ActionCategory.value !== 4)
  					? `gcd ${additionalClasses}`
  					: `ogcd ${additionalClasses}`
  			}
 -			src={`https://xivapi.com/${apiData.Icon}`}
-+			src={`https://cafemaker.wakingsands.com/${apiData.Icon}`}
++			src={`https://xivapi-v2.xivcdn.com/api/asset?path=${encodeURIComponent(apiData.Icon.path)}`}
  			alt={apiData.Name || ""}
  		/>
  	)

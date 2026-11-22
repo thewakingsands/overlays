@@ -3763,33 +3763,7 @@ index 6c8f960..4c24366 100644
 -      name: 'settings',
 -      callback: _ => {
 -        let resize = window.config.get('style.resize-factor')
-+    ;[
-+      {
-+        name: 'toggle-detail',
-+        toggle: 'collapsed',
-+      },
-+      {
-+        name: 'nameblur',
-+        toggle: 'nameblur',
-+      },
-+      {
-+        name: 'merge-pet',
-+        toggle: 'pet-merged',
-+        callback: (_) => {
-+          window.config.toggle('format.merge_pet')
-+          window.config.save()
-+          window.renderer.update()
-+        },
-+      },
-+      {
-+        name: 'end-encounter',
-+        callback: (_) => layer.request('end'),
-+      },
-+      {
-+        name: 'settings',
-+        callback: (_) => {
-+          let resize = window.config.get('style.resize-factor')
- 
+-
 -        window.open(
 -          '../config/index.html',
 -          'kagerou - Settings',
@@ -3800,18 +3774,7 @@ index 6c8f960..4c24366 100644
 -      name: 'donate',
 -      callback: _ => {
 -        let resize = window.config.get('style.resize-factor')
-+          window.open(
-+            '../config/index.html',
-+            'kagerou - Settings',
-+            `width=${800 * resize},height=${600 * resize}`,
-+          )
-+        },
-+      },
-+      {
-+        name: 'donate',
-+        callback: (_) => {
-+          let resize = window.config.get('style.resize-factor')
- 
+-
 -        window.open(
 -          'https://hibiya.moe/donate',
 -          'hibiya.moe - donate',
@@ -3852,6 +3815,45 @@ index 6c8f960..4c24366 100644
 -      [].forEach.call($(`[data-button=${_.name}]`), el => {
 -        el.addEventListener('click', function(e) {
 -          if(_.toggle) {
++    ;[
++      {
++        name: 'toggle-detail',
++        toggle: 'collapsed',
++      },
++      {
++        name: 'nameblur',
++        toggle: 'nameblur',
++      },
++      {
++        name: 'merge-pet',
++        toggle: 'pet-merged',
++        callback: (_) => {
++          window.config.toggle('format.merge_pet')
++          window.config.save()
++          window.renderer.update()
++        },
++      },
++      {
++        name: 'end-encounter',
++        callback: (_) => layer.request('end'),
++      },
++      {
++        name: 'settings',
++        callback: (_) => {
++          let resize = window.config.get('style.resize-factor')
++
++          window.open(
++            '../config/index.html',
++            'kagerou - Settings',
++            `width=${800 * resize},height=${600 * resize}`,
++          )
++        },
++      },
++      {
++        name: 'donate',
++        callback: (_) => {
++          let resize = window.config.get('style.resize-factor')
++
 +          window.open(
 +            'https://hibiya.moe/donate',
 +            'hibiya.moe - donate',
@@ -4789,13 +4791,13 @@ index 17db49e..2946ef5 100644
 -      if(!Array.isArray(path)) {
 -        path = [path]
 -      }
+-
+-      for(let p of path){
+-        let sanitizedId = p.replace(/[^a-z]/g, '_')
 +    loadStyle(paths, section) {
 +      for (const [id, handler] of Object.entries(paths)) {
 +        const sanitizedId = id.replace(/[^a-z]/g, '_')
  
--      for(let p of path){
--        let sanitizedId = p.replace(/[^a-z]/g, '_')
--
 -        let xhr = new XMLHttpRequest()
 -        xhr.open('GET', p, true)
 -        xhr.onreadystatechange = _ => {
@@ -5330,14 +5332,15 @@ index 23274a4..ec4da48 100644
 -    typeof number === 'string'? pFloat(number)
 -  : typeof number === 'number'? number
 -  : 0).toFixed(decimals)
+-
+-  if(number >= 1000 || abbrUnit) {
 +    typeof number === 'string'
 +      ? pFloat(number)
 +      : typeof number === 'number'
 +      ? number
 +      : 0
 +  ).toFixed(decimals)
- 
--  if(number >= 1000 || abbrUnit) {
++
 +  if (number >= 1000 || abbrUnit) {
      type += ' with-larger-digits'
    }
