@@ -9,7 +9,7 @@
 1. 本地化字体资源：将 `index.html` 中的 Google Fonts `Inter` 引用替换为 `https://overlays.ffcafe.cn/fonts/inter.css`，避免直接依赖 Google Fonts。
 2. 本地化 OverlayPlugin 资源：将 `index.html` 中的 `common.min.js` 从 `https://overlayplugin.github.io/OverlayPlugin/assets/shared/common.min.js` 替换为 `https://overlays.ffcafe.cn/assets/overlayplugin/common.min.js`，改为使用 ffcafe 托管资源，提升访问稳定性。
 
-除上述改动外，当前 `cn` 分支相对 `upstream/main` 未发现其他功能性差异。
+3. 设置窗口：Settings 打开同源的 `settings.html`，设置变更即时生效并保留到刷新后。
 
 ## 构建方法
 
